@@ -1,0 +1,391 @@
+[
+ {
+  "text": "Em hãy cho biết, phương pháp nào sau đây được sử dụng để khởi động ứng dụng đã cài đặt trên máy tính để bàn? Chọn Có nếu đáp án đúng và Không nếu đáp án sai.",
+  "type": "match",
+  "pairs": [
+   [
+    "Nhấp chuột trái vào biểu tượng của chương trình trên Thanh tác vụ (Taskbar) và chọn Open.",
+    "Không"
+   ],
+   [
+    "Nhấp đúp chuột vào biểu tượng lối tắt của chương trình trên màn hình nền (Desktop).",
+    "Có"
+   ],
+   [
+    "Chọn tất cả các biểu tượng lối tắt trên màn hình và nhấn Enter trên bàn phím.",
+    "Không"
+   ]
+  ],
+  "choices": [
+   "Có",
+   "Không"
+  ]
+ },
+ {
+  "text": "Em hãy chọn Có nếu là cách để thoát khỏi ứng dụng trên máy tính để bàn đã được cài đặt và chọn Không nếu không phải.",
+  "type": "match",
+  "pairs": [
+   [
+    "Nhấp vào nút có dấu \"X\" ở góc phải trên cùng của cửa sổ.",
+    "Có"
+   ],
+   [
+    "Rút phích cắm màn hình.",
+    "Không"
+   ],
+   [
+    "Nhấp chuột phải vào biểu tượng của chương trình trên thanh tác vụ (Taskbar) và chọn Close, Exit hoặc Disable.",
+    "Có"
+   ]
+  ],
+  "choices": [
+   "Có",
+   "Không"
+  ]
+ },
+ {
+  "text": "Em sẽ tìm thấy lệnh Đóng (Close) trên thẻ (Tab) nào sau đây?",
+  "type": "single",
+  "image": "images/splv1_4_q3-tab-close.png",
+  "answer": [
+   0
+  ],
+  "options": [
+   "A",
+   "B",
+   "C",
+   "D",
+   "E"
+  ]
+ },
+ {
+  "text": "Em hãy cho biết, phần mềm nào sau đây là hệ điều hành?",
+  "type": "single",
+  "answer": [
+   0
+  ],
+  "options": [
+   "Microsoft Windows",
+   "Apple iPad",
+   "Microsoft Word",
+   "Google"
+  ]
+ },
+ {
+  "text": "Em muốn tìm một trò chơi đã được cài đặt trên máy tính của mình. Trên thanh tác vụ được hiển thị, em nhấp vào đâu để tìm trò chơi?",
+  "type": "single",
+  "image": "images/splv1_4_q4-taskbar.png",
+  "answer": [
+   0
+  ],
+  "options": [
+   "A",
+   "B",
+   "C",
+   "D",
+   "E",
+   "F",
+   "G"
+  ]
+ },{
+  "text": "Em hãy xác định mỗi tùy chọn là phần cứng hoặc phần mềm.",
+  "type": "drag",
+  "pairs": [
+   [
+    "Máy in (Printer)",
+    "Phần cứng (Hardware)"
+   ],
+   [
+    "Cơ sở dữ liệu (Database)",
+    "Phần mềm (Software)"
+   ],
+   [
+    "Chuột (Mouse)",
+    "Phần cứng (Hardware)"
+   ],
+   [
+    "Bàn phím (Keyboard)",
+    "Phần cứng (Hardware)"
+   ],
+   [
+    "Thư điện tử (Email)",
+    "Phần mềm (Software)"
+   ]
+  ],
+  "explain": "Phần cứng là những thiết bị em có thể cầm, nắm và nhìn thấy được như máy in, chuột, bàn phím. Phần mềm là các chương trình do con người tạo ra, em không thể cầm nắm được như cơ sở dữ liệu và thư điện tử (email)."
+ },
+ {
+  "text": "Em hãy chọn phát biểu đúng nhất về một phần mềm ứng dụng trên máy tính để bàn?",
+  "type": "single",
+  "answer": [
+   3
+  ],
+  "explain": "Chương trình ứng dụng trên máy tính để bàn (Desktop Application) phải được cài đặt vào máy tính trước thì mới chạy được. Vì vậy nó chiếm dung lượng lưu trữ, chỉ dùng trên máy đã cài và không cần Internet để chạy. Phần mềm đăng nhập từ thiết bị nào cũng được là ứng dụng Web.",
+  "options": [
+   "Phần mềm không yêu cầu bất kỳ dung lượng lưu trữ nào trên máy tính của em.",
+   "Em có thể đăng nhập vào phần mềm từ bất kỳ thiết bị nào.",
+   "Máy tính của em phải được kết nối với Internet để chạy phần mềm.",
+   "Phần mềm phải được cài đặt trên máy tính của em trước khi em có thể khởi chạy."
+  ]
+ },
+ {
+  "text": "Em hãy cho biết, thuật ngữ nào là phần mềm chạy trên điện thoại hoặc máy tính bảng?",
+  "type": "single",
+  "answer": [
+   3
+  ],
+  "explain": "App là phiên bản nhẹ của ứng dụng phần mềm, được thiết kế để chạy trên điện thoại thông minh và máy tính bảng. Icon là biểu tượng, Widget là tiện ích nhỏ trên màn hình, còn Program là chương trình nói chung.",
+  "options": [
+   "Icon",
+   "Widget",
+   "Program",
+   "App"
+  ]
+ },
+ {
+  "text": "Em hãy ghép thuật ngữ với định nghĩa phù hợp.",
+  "type": "drag",
+  "pairs": [
+   [
+    "Phải được cài đặt trên máy tính trước khi nó có thể chạy.",
+    "Desktop Application"
+   ],
+   [
+    "Được thiết kế để thực hiện nhiều chức năng khác nhau.",
+    "Application"
+   ],
+   [
+    "Phiên bản nhẹ của ứng dụng phần mềm thường được thiết kế để chạy trên điện thoại thông minh và máy tính bảng, nhưng có một số cũng chạy trên máy tính xách tay.",
+    "App"
+   ]
+  ],
+  "explain": "Desktop Application cần cài đặt trên máy tính trước khi chạy. Application là ứng dụng có nhiều chức năng khác nhau. App là phiên bản nhẹ dành cho điện thoại và máy tính bảng."
+ },
+ {
+  "text": "Em hãy cho biết, phần mềm nào dưới đây là phần mềm ứng dụng?",
+  "type": "single",
+  "answer": [
+   0
+  ],
+  "explain": "Microsoft Word là phần mềm ứng dụng, giúp em làm công việc cụ thể là xử lí văn bản. Flash Drive là thiết bị phần cứng. Windows và iOS là hệ điều hành.",
+  "options": [
+   "Microsoft Word",
+   "Flash Drive",
+   "Windows",
+   "iOS"
+  ]
+ },{
+  "text": "Em hãy cho biết, hai thiết bị nào sau đây là thiết bị ngoại vi? (Chọn 2)",
+  "type": "multi",
+  "answer": [
+   0,
+   3
+  ],
+  "options": [
+   {
+    "alt": "Chuột (Mouse)",
+    "img": "images/spl1-chuot.png"
+   },
+   {
+    "alt": "Dây nguồn",
+    "img": "images/spl1-day-nguon.png"
+   },
+   {
+    "alt": "Thùng máy tính",
+    "img": "images/spl1-thung-may.png"
+   },
+   {
+    "alt": "Bàn phím (Keyboard)",
+    "img": "images/spl1-ban-phim.jpg"
+   }
+  ]
+ },
+ {
+  "text": "Em hãy cho biết, loại phần cứng (Hardware) nào gửi dữ liệu đến máy tính?",
+  "type": "single",
+  "answer": [
+   3
+  ],
+  "options": [
+   "Xuất (Output)",
+   "Màn hình (Monitor)",
+   "Lưu trữ (Storage)",
+   "Nhập (Input)"
+  ]
+ },
+ {
+  "text": "Em hãy cho biết, thiết bị nào có bàn di chuột tích hợp để trỏ và nhấp?",
+  "type": "single",
+  "answer": [
+   3
+  ],
+  "options": [
+   "Máy tính để bàn (Desktop)",
+   "Điện thoại thông minh (Smartphone)",
+   "Máy tính bảng (Tablet)",
+   "Máy tính xách tay (Laptop)"
+  ]
+ },
+ {
+  "text": "Em hãy cho biết, thiết bị đầu vào (Input Device) nào sau đây được tích hợp vào điện thoại thông minh?",
+  "type": "single",
+  "answer": [
+   1
+  ],
+  "options": [
+   "Bàn di chuột (Touchpad)",
+   "Màn hình cảm ứng (Touchscreen)",
+   "Tai nghe (Earbuds)",
+   "Bộ sạc pin (Charger)"
+  ]
+ },
+ {
+  "text": "Em hãy cho biết, tùy chọn nào sau đây là ví dụ về thiết bị đầu vào được tích hợp sẵn trên máy tính?",
+  "type": "single",
+  "answer": [
+   0
+  ],
+  "options": [
+   "Màn hình cảm ứng (Touchscreen)",
+   "Tai nghe (Headphones)",
+   "Chuột (Mouse)"
+  ]
+ },
+ {
+  "text": "Em hãy cho biết, hình ảnh này là loại thiết bị máy tính nào?",
+  "type": "single",
+  "image": "images/spl1-laptop-1.jpg",
+  "answer": [
+   3
+  ],
+  "options": [
+   "Máy tính để bàn (Desktop)",
+   "Điện thoại thông minh (Smartphone)",
+   "Máy tính bảng (Tablet)",
+   "Máy tính xách tay (Laptop)"
+  ]
+ },
+ {
+  "text": "Em hãy cho biết, hình ảnh nào sau đây là một chiếc Laptop?",
+  "type": "single",
+  "answer": [
+   1
+  ],
+  "options": [
+   {
+    "alt": "Máy tính để bàn (Desktop)",
+    "img": "images/spl1-desktop.png"
+   },
+   {
+    "alt": "Máy tính xách tay (Laptop)",
+    "img": "images/spl1-laptop-2.png"
+   },
+   {
+    "alt": "Điện thoại thông minh (Smartphone)",
+    "img": "images/spl1-smartphone.png"
+   },
+   {
+    "alt": "Máy tính bảng (Tablet)",
+    "img": "images/spl1-tablet.jpg"
+   }
+  ]
+ },
+ {
+  "text": "Em hãy ghép mỗi thuật ngữ ở cột bên phải với định nghĩa phù hợp ở cột bên trái.",
+  "type": "connect",
+  "pairs": [
+   [
+    "Một máy tính có các thành phần của máy tính để bàn được tích hợp trong một khối duy nhất (thay vì tách biệt giữa thùng máy và màn hình hiển thị).",
+    "Máy tính tất cả trong một (All-in-One Computer)"
+   ],
+   [
+    "Máy tính cá nhân đặt trên hoặc gần bàn làm việc và được sử dụng tại một vị trí duy nhất do yêu cầu về kích thước và nguồn điện.",
+    "Máy tính để bàn (Desktop)"
+   ],
+   [
+    "Điện thoại thông minh thường có màn hình cảm ứng, khả năng kết nối Internet và hệ điều hành.",
+    "Điện thoại thông minh (Smartphone)"
+   ],
+   [
+    "Một thiết bị di động có kích thước trung gian giữa máy tính xách tay và điện thoại di động, thường có màn hình cảm ứng và khả năng kết nối Internet. (Nó có thể có hoặc không có quyền truy cập vào mạng di động.)",
+    "Máy tính bảng (Tablet)"
+   ],
+   [
+    "Một máy tính di động được sử dụng ở nhiều địa điểm. Nguồn điện từ Pin hoặc AC.",
+    "Máy tính xách tay (Laptop)"
+   ]
+  ]
+ },
+ {
+  "text": "Em hãy chọn Có nếu phát biểu đó đúng và Không nếu phát biểu đó sai.",
+  "type": "match",
+  "pairs": [
+   [
+    "Máy tính để bàn có thể di động được.",
+    "Không"
+   ],
+   [
+    "Điện thoại thông minh, máy tính bảng và máy tính xách tay có thể di động được.",
+    "Có"
+   ],
+   [
+    "Tai nghe (Headsets, Headphones), loa đều là thiết bị ngoại vi cho âm thanh (Sound/Audio).",
+    "Có"
+   ]
+  ]
+ },
+ {
+  "text": "Em hãy phân loại thiết bị theo chức năng của chúng.",
+  "type": "sort",
+  "items": [
+   {
+    "text": "Màn hình (Monitor)",
+    "group": 1
+   },
+   {
+    "text": "Chuột (Mouse)",
+    "group": 0
+   },
+   {
+    "text": "Máy chiếu (Projector)",
+    "group": 1
+   },
+   {
+    "text": "Máy in (Printer)",
+    "group": 1
+   },
+   {
+    "text": "Bàn phím (Keyboard)",
+    "group": 0
+   },
+   {
+    "text": "Bàn di chuột cảm ứng (Touchpad)",
+    "group": 0
+   },
+   {
+    "text": "Máy quét (Scanner)",
+    "group": 0
+   },
+   {
+    "text": "Micro (Microphone)",
+    "group": 0
+   },
+   {
+    "text": "Loa (Speaker)",
+    "group": 1
+   },
+   {
+    "text": "Tai nghe (Headphone)",
+    "group": 1
+   },
+   {
+    "text": "Webcam",
+    "group": 0
+   }
+  ],
+  "groups": [
+   "Thiết bị đầu vào (Input Device)",
+   "Thiết bị đầu ra (Output Device)"
+  ]
+ }
+]
