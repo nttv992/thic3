@@ -6,80 +6,32 @@ window.SITE_DATA = {
       "name": "Tiểu học",
       "programs": [
         {
-          "title": "Chương trình IC3 SPARK GS6",
+          "title": "Chương trình IC3 GS6",
           "icon": "⭐",
           "levels": [
             {
-              "name": "SPARK Level 1",
-              "icon": "🌱",
+              "name": "Level 1",
+              "icon": "🪴",
               "color": "green",
-              "reviewTitle": "IC3 SPARK GS6 - Level 1",
+              "reviewTitle": "Level 1",
               "docUrl": "",
-              "topics": [
-                {
-                  "title": "Chủ đề  Sáng tạo nội dung",
-                  "lessons": [
-                    {
-                      "nums": "17, 18",
-                      "name": "Tài liệu và bài trình chiếu + Làm quen Microsoft Word",
-                      "lessonUrl": "",
-                      "reviewUrl": "quiz.html?q=splv1_1718"
-                    }
-                  ]
-                }
-              ]
+              "topics": []
             },
             {
-              "name": "SPARK Level 2",
-              "icon": "🌿",
+              "name": "Level 2",
+              "icon": "🌸",
               "color": "teal",
-              "reviewTitle": "SPARK Level 2",
+              "reviewTitle": "Level 2",
               "docUrl": "",
-              "topics": [
-                {
-                  "title": "ÔN TẬP HK1",
-                  "lessons": [
-                    {
-                      "nums": "1",
-                      "name": "Đề 1",
-                      "lessonUrl": "",
-                      "reviewUrl": "quiz.html?q=splv2_hk1_01"
-                    },
-                    {
-                      "nums": "2",
-                      "name": "Đề 2",
-                      "lessonUrl": "",
-                      "reviewUrl": "quiz.html?q=splv2_hk1_02"
-                    }
-                  ]
-                }
-              ]
+              "topics": []
             },
             {
-              "name": "SPARK Level 3",
-              "icon": "🌳",
+              "name": "Level 3",
+              "icon": "🍎",
               "color": "blue",
-              "reviewTitle": "SPARK Level 3",
+              "reviewTitle": "Level 3",
               "docUrl": "",
-              "topics": [
-                {
-                  "title": "ÔN TẬP HK1",
-                  "lessons": [
-                    {
-                      "nums": "1",
-                      "name": "Đề 1",
-                      "lessonUrl": "",
-                      "reviewUrl": "quiz.html?q=splv3_hk1_01"
-                    },
-                    {
-                      "nums": "2",
-                      "name": "Đề 2",
-                      "lessonUrl": "",
-                      "reviewUrl": "quiz.html?q=splv3_hk1_02"
-                    }
-                  ]
-                }
-              ]
+              "topics": []
             }
           ]
         }
@@ -101,7 +53,7 @@ window.SITE_DATA = {
       "Chọn **“Câu hỏi đánh giá”** để làm bài."
     ],
     "passwordLabel": "Mật khẩu chung:",
-    "password": "Vvt@13579",
+    "password": "K12online@2026",
     "videoText": "Xem video hướng dẫn tại đây",
     "videoUrl": ""
   }
