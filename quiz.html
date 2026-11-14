@@ -10,7 +10,6 @@
 <script src="data.js"></script>
 </head><body>
 <header class="topbar" id="tb"><div class="wrap"><a class="brand" href="index.html"><span id="siteIcon"></span><span id="siteTitle"></span></a><div class="who" id="who" hidden></div></div></header>
-<div class="wrap navrow"><a class="back" id="backLink" href="index.html">← Quay lại</a></div>
 <main class="wrap" id="app"><div class="card">Đang tải…</div></main>
 <script>
 const $=s=>document.querySelector(s),esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -23,14 +22,8 @@ const loadStu=async id=>{try{const r=await sb.rpc('list_students_v2',{p_class:St
 let PRE=null; // danh sách học sinh của lớp đã nhớ, tải sẵn song song với bài + danh sách lớp
 // Tên + biểu tượng trang (lấy từ data.js, giống trang chủ)
 {const D=window.SITE_DATA||{};$('#siteIcon').textContent=D.siteIcon||'';$('#siteTitle').textContent=D.siteTitle||'Trang chủ'}
-// Nút Quay lại: về đúng trang danh sách bài của level (index.html truyền &b=nhóm/chương trình/level)
-$('#backLink').addEventListener('click',e=>{
-  if(onPick||!window.showPick)return;           // ở màn chọn tên: về trang danh sách bài như cũ
-  e.preventDefault();
-  if(Q&&fin===false&&!REVM&&!confirm('Em muốn thoát bài đang làm? Kết quả sẽ không được lưu.'))return;
-  window.showPick();                            // đang làm bài / xem kết quả: về màn chọn trường, lớp, tên
-});
-{const b=(new URLSearchParams(location.search).get('b')||'').replace(/[^\d\/]/g,'');$('#backLink').href='index.html#/'+b}
+// Logo "Trang chủ" về đúng trang danh sách bài của level (index.html truyền &b=nhóm/chương trình/level)
+{const b=(new URLSearchParams(location.search).get('b')||'').replace(/[^\d\/]/g,'');document.querySelector('.brand').href='index.html#/'+b}
 const shuf=a=>{a=a.slice();for(let k=a.length-1;k>0;k--){const j=Math.floor(Math.random()*(k+1));[a[k],a[j]]=[a[j],a[k]]}return a};
 // Xáo trộn thứ tự câu hỏi + đáp án (chỉ số đáp án đúng được đổi theo)
 function prep(qs){return shuf(qs.map(q=>{
@@ -190,6 +183,7 @@ function begin(){if(fxStop)fxStop();Q=prep(quiz.questions);i=0;right=0;pts=0;t0=
   await showPick();
 })();
 
+const qtitle=()=>`<div class="qtitle">📝 ${esc(quiz.title)}</div>`;
 const topbar=f=>{const p=Math.min(Math.max(f*100,3),97);return `<div class="top"><span class="cnt">Câu ${i+1}/${Q.length}</span><div class="track"><i id="pf" style="width:${p}%"></i></div></div>`};
 function show(rv){
   if(rv&&fxStop)fxStop();
@@ -206,7 +200,7 @@ function show(rv){
   }
   const top=rv?`<div class="top"><span class="cnt">Câu ${i+1}/${Q.length}</span><span class="rvtag">👁 Xem lại bài làm · Lần ${REC.n}</span></div>`:topbar(i/Q.length);
   const foot=rv?`<button class="go alt" id="pv"${i?'':' disabled'}>← Trước</button><button class="go alt" id="rr">📊 Xem kết quả</button><button class="go" id="nx"${i+1<Q.length?'':' disabled'}>Tiếp theo →</button>`:'<button class="go" id="ok">Kiểm Tra ✓</button>';
-  app.innerHTML=layout(`${top}<div class="card">${b}<div id="fb"></div><div class="ft${rv?' rv':''}">${foot}</div></div>`,rv?nav(REC.res,Q.length,i,true):nav(RS,Q.length,i,false));
+  app.innerHTML=layout(`${qtitle()}${top}<div class="card">${b}<div id="fb"></div><div class="ft${rv?' rv':''}">${foot}</div></div>`,rv?nav(REC.res,Q.length,i,true):nav(RS,Q.length,i,false));
   if(q.type==='drag'){P=q.pairs.map(()=>null);drawDrag()}
   if(q.type==='sort'){P=q.items.map(()=>null);SS=null;drawSort()}
   if(isConn(q)){P=q.pairs.map(()=>null);RV=q.rv=q.rv||shuf(q.pairs.map(x=>x[1]));CS=null;drawConn()}
@@ -236,10 +230,11 @@ function fbox(q,a){
   return `<div class="fb ${r?'good':'bad'}"><b>${r?'✔ Chính xác!':f>0?'◐ Đúng một phần':'✗ Chưa đúng'}</b>${r||isConn(q)||q.type==='sort'?'':`<p>Đáp án: ${esc(shown(q))}</p>`}${q.explain?`<p>${esc(q.explain)}</p>`:''}</div>`;
 }
 
-const chip=v=>`<span class="chip${sel===v?' sel':''}" draggable="true" data-v="${esc(v)}">${esc(v)}</span>`;
+let selIdx=-1;
+const chip=(v,bi)=>`<span class="chip${bi!==undefined&&sel===v&&selIdx===bi?' sel':''}" draggable="true" data-v="${esc(v)}"${bi!==undefined?` data-bi="${bi}"`:''}>${esc(v)}</span>`;
 function drawDrag(){
   const q=Q[i],bank=[],cnt={};q.pairs.forEach(x=>cnt[x[1]]=(cnt[x[1]]||0)+1);P.forEach(x=>{if(x)cnt[x]--});Object.keys(cnt).forEach(v=>{for(let n=0;n<cnt[v];n++)bank.push(v)});bank.sort();
-  $('.dq').innerHTML=q.pairs.map((x,k)=>`<div class="row"><span class="lf">${esc(x[0])}</span>→<span class="slot" data-k="${k}">${P[k]?chip(P[k]):''}</span></div>`).join('')+`<div class="bank">${bank.map(v=>chip(v)).join('')}</div>`;
+  $('.dq').innerHTML=q.pairs.map((x,k)=>`<div class="row"><span class="lf">${esc(x[0])}</span>→<span class="slot" data-k="${k}">${P[k]?chip(P[k]):''}</span></div>`).join('')+`<div class="bank">${bank.map((v,bi)=>chip(v,bi)).join('')}</div>`;
 }
 let DSRC=-1;
 function put(k,v,src=-1){if(locked)return;const q=Q[i],tot=q.pairs.filter(x=>x[1]===v).length,used=P.filter(x=>x===v).length;if(src<0&&P[k]!==v&&used>=tot)return;if(src>-1)P[src]=null;P[k]=v;sel=null;drawDrag()}
@@ -247,7 +242,7 @@ document.addEventListener('click',e=>{
   if(locked||!Q||!$('.dq'))return;
   const c=e.target.closest('.chip'),s=e.target.closest('.slot');if(!c&&!s)return;
   if(s&&sel)return put(+s.dataset.k,sel);
-  if(c&&s){P[+s.dataset.k]=null;sel=null}else if(c)sel=sel===c.dataset.v?null:c.dataset.v;
+  if(c&&s){P[+s.dataset.k]=null;sel=null}else if(c){const bi=+c.dataset.bi;if(sel===c.dataset.v&&selIdx===bi){sel=null;selIdx=-1}else{sel=c.dataset.v;selIdx=bi}}
   drawDrag();
 });
 document.addEventListener('dragstart',e=>{const c=e.target.closest&&e.target.closest('.chip');if(c){const sl=c.closest('.slot');DSRC=sl?+sl.dataset.k:-1;e.dataTransfer.setData('text/plain',c.dataset.v)}});
