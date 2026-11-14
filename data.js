@@ -20,8 +20,14 @@ window.SITE_DATA = {
                   "title": "Chủ đề : Căn bản về công nghệ",
                   "lessons": [
                     {
-                      "nums": "*",
-                      "name": "Ôn tập T2",
+                      "nums": "1",
+                      "name": "Ôn tập 1",
+                      "lessonUrl": "",
+                      "reviewUrl": ""
+                    },
+                    {
+                      "nums": "2",
+                      "name": "Ôn tập 2",
                       "lessonUrl": "",
                       "reviewUrl": "quiz.html?q=lv1_cd1_t2"
                     }
@@ -32,7 +38,7 @@ window.SITE_DATA = {
                   "lessons": [
                     {
                       "nums": "*",
-                      "name": "Ôn tập T2",
+                      "name": "Ôn tập",
                       "lessonUrl": "",
                       "reviewUrl": "quiz.html?q=lv1_cd4"
                     }
