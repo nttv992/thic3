@@ -21,9 +21,16 @@ let onPick=true; // true = đang ở màn chọn trường/lớp/tên
 const loadStu=async id=>{try{const r=await sb.rpc('list_students_v2',{p_class:String(id)});if(!r.error&&Array.isArray(r.data))return r}catch(e){}return sb.rpc('list_students',{p_class:id})};
 let PRE=null; // danh sách học sinh của lớp đã nhớ, tải sẵn song song với bài + danh sách lớp
 // Tên + biểu tượng trang (lấy từ data.js, giống trang chủ)
-{const D=window.SITE_DATA||{};$('#siteIcon').textContent=D.siteIcon||'';$('#siteTitle').textContent=D.siteTitle||'Trang chủ'}
-// Logo "Trang chủ" về đúng trang danh sách bài của level (index.html truyền &b=nhóm/chương trình/level)
-{const b=(new URLSearchParams(location.search).get('b')||'').replace(/[^\d\/]/g,'');document.querySelector('.brand').href='index.html#/'+b}
+// Nút Quay lại (thay nút Trang chủ): ở màn chọn tên → về danh sách bài của level (index.html truyền &b=nhóm/chương trình/level);
+// đang làm bài / xem kết quả → về màn chọn trường, lớp, tên
+$('#siteIcon').textContent='←';$('#siteTitle').textContent='Quay lại';
+$('.brand').addEventListener('click',e=>{
+  if(onPick||!window.showPick)return;
+  e.preventDefault();
+  if(Q&&fin===false&&!REVM&&!confirm('Em muốn thoát bài đang làm? Kết quả sẽ không được lưu.'))return;
+  window.showPick();
+});
+{const b=(new URLSearchParams(location.search).get('b')||'').replace(/[^\d\/]/g,'');$('.brand').href='index.html#/'+b}
 const shuf=a=>{a=a.slice();for(let k=a.length-1;k>0;k--){const j=Math.floor(Math.random()*(k+1));[a[k],a[j]]=[a[j],a[k]]}return a};
 // Xáo trộn thứ tự câu hỏi + đáp án (chỉ số đáp án đúng được đổi theo)
 function prep(qs){return shuf(qs.map(q=>{
