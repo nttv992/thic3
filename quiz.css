@@ -282,3 +282,7 @@ body.zlock{overflow:hidden}
 .qname span{font-size:18px;font-weight:800;color:var(--ink);line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .qname[hidden]{display:none}
 @media(max-width:560px){.qname{max-width:36%;padding:4px 10px;min-height:46px}.qname span{font-size:14px}}
+
+.topbar .tl{display:flex;align-items:center;gap:16px;min-width:0}
+.topbar .back{white-space:nowrap}
+@media(max-width:560px){.topbar .tl{gap:8px}.topbar .back{font-size:14px;padding:4px 10px}}
