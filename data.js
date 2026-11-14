@@ -15,7 +15,30 @@ window.SITE_DATA = {
               "color": "green",
               "reviewTitle": "Level 1",
               "docUrl": "",
-              "topics": []
+              "topics": [
+                {
+                  "title": "Chủ đề : Căn bản về công nghệ",
+                  "lessons": [
+                    {
+                      "nums": "*",
+                      "name": "Ôn tập T2",
+                      "lessonUrl": "",
+                      "reviewUrl": "quiz.html?q=lv1_cd1_t2"
+                    }
+                  ]
+                },
+                {
+                  "title": "Chủ đề: Truyền thông",
+                  "lessons": [
+                    {
+                      "nums": "*",
+                      "name": "Ôn tập T2",
+                      "lessonUrl": "",
+                      "reviewUrl": "quiz.html?q=lv1_cd4"
+                    }
+                  ]
+                }
+              ]
             },
             {
               "name": "Level 2",
