@@ -138,7 +138,7 @@ function begin(){if(fxStop)fxStop();Q=prep(quiz.questions);i=0;right=0;pts=0;t0=
   if(l0.cls)PRE={id:l0.cls,p:Promise.resolve(loadStu(l0.cls)).catch(()=>({data:null}))};
   const [{data},{data:cl}]=await Promise.all([sb.from('quizzes').select('*').eq('id',qid||'').maybeSingle(),sb.rpc('list_classes')]);
   if(!data){app.innerHTML='<div class="card"><h1>Ôi, không tìm thấy bài ôn 😢</h1><p>Em hãy kiểm tra lại đường link hoặc nhờ thầy cô gửi lại nhé.</p><a class="go alt" href="index.html">← Về trang chủ</a></div>';return}
-  quiz=data;document.title=quiz.title||'Làm bài';$('#qname').textContent=quiz.title||'';
+  quiz=data;document.title=quiz.title||'Làm bài';$('#qname').innerHTML='<span>'+esc(quiz.title||'')+'</span>';
   CL=cl||[];
   async function showPick(){
     if(fxStop)fxStop();
