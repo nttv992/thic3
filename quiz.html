@@ -9,7 +9,7 @@
 <script src="config.js"></script>
 <script src="data.js"></script>
 </head><body>
-<header class="topbar" id="tb"><div class="wrap"><a class="brand" href="index.html"><span id="siteIcon"></span><span id="siteTitle"></span></a><div class="who" id="who" hidden></div></div></header>
+<header class="topbar" id="tb"><div class="wrap"><a class="brand" href="index.html"><span id="siteIcon"></span><span id="siteTitle"></span></a><div class="qname" id="qname" hidden></div><div class="who" id="who" hidden></div></div></header>
 <main class="wrap" id="app"><div class="card">Đang tải…</div></main>
 <script>
 const $=s=>document.querySelector(s),esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -88,7 +88,7 @@ function showWho(){
   const ini=(who.name.trim().split(/\s+/).pop()||'?').charAt(0).toUpperCase();
   const w=$('#who');
   w.innerHTML=`<span class="av">${esc(ini)}</span><span class="wt"><b>${esc(who.name)}</b><small>${who.code?esc(who.code)+' · ':''}${esc(clsLabel(who.cls))}, ${esc(who.school)}</small></span>`;
-  w.hidden=false;$('#tb').classList.add('has-who');onPick=false;
+  w.hidden=false;$('#qname').hidden=!quiz||!quiz.title;$('#tb').classList.add('has-who');onPick=false;
 }
 // ---------- Lịch sử làm bài (lưu trên máy của học sinh, theo bài + học sinh) ----------
 const hkey=sid=>'qh2|'+qid+'|'+sid;
@@ -138,11 +138,11 @@ function begin(){if(fxStop)fxStop();Q=prep(quiz.questions);i=0;right=0;pts=0;t0=
   if(l0.cls)PRE={id:l0.cls,p:Promise.resolve(loadStu(l0.cls)).catch(()=>({data:null}))};
   const [{data},{data:cl}]=await Promise.all([sb.from('quizzes').select('*').eq('id',qid||'').maybeSingle(),sb.rpc('list_classes')]);
   if(!data){app.innerHTML='<div class="card"><h1>Ôi, không tìm thấy bài ôn 😢</h1><p>Em hãy kiểm tra lại đường link hoặc nhờ thầy cô gửi lại nhé.</p><a class="go alt" href="index.html">← Về trang chủ</a></div>';return}
-  quiz=data;document.title=quiz.title||'Làm bài';
+  quiz=data;document.title=quiz.title||'Làm bài';$('#qname').textContent=quiz.title||'';
   CL=cl||[];
   async function showPick(){
     if(fxStop)fxStop();
-    document.body.classList.remove('hasnav');$('#who').hidden=true;$('#tb').classList.remove('has-who');
+    document.body.classList.remove('hasnav');$('#who').hidden=true;$('#qname').hidden=true;$('#tb').classList.remove('has-who');
     Object.assign(pk,{school:'',cid:'',cname:'',sid:'',sname:''});STU=[];HIST=null;REVM=false;onPick=true;scrollTo(0,0);
   const schools=[...new Set(CL.map(c=>c.school))].sort(NAT);
   app.innerHTML=`<section class="hero"><h1>Chào em! <mark>Sẵn sàng</mark> chưa? 👋</h1><p>Chọn trường, lớp và tên của em để bắt đầu nhé.</p><span class="qbadge">📝 ${esc(quiz.title)}</span></section>
@@ -183,7 +183,6 @@ function begin(){if(fxStop)fxStop();Q=prep(quiz.questions);i=0;right=0;pts=0;t0=
   await showPick();
 })();
 
-const qtitle=()=>`<div class="qtitle">📝 ${esc(quiz.title)}</div>`;
 const topbar=f=>{const p=Math.min(Math.max(f*100,3),97);return `<div class="top"><span class="cnt">Câu ${i+1}/${Q.length}</span><div class="track"><i id="pf" style="width:${p}%"></i></div></div>`};
 function show(rv){
   if(rv&&fxStop)fxStop();
@@ -200,7 +199,7 @@ function show(rv){
   }
   const top=rv?`<div class="top"><span class="cnt">Câu ${i+1}/${Q.length}</span><span class="rvtag">👁 Xem lại bài làm · Lần ${REC.n}</span></div>`:topbar(i/Q.length);
   const foot=rv?`<button class="go alt" id="pv"${i?'':' disabled'}>← Trước</button><button class="go alt" id="rr">📊 Xem kết quả</button><button class="go" id="nx"${i+1<Q.length?'':' disabled'}>Tiếp theo →</button>`:'<button class="go" id="ok">Kiểm Tra ✓</button>';
-  app.innerHTML=layout(`${qtitle()}${top}<div class="card">${b}<div id="fb"></div><div class="ft${rv?' rv':''}">${foot}</div></div>`,rv?nav(REC.res,Q.length,i,true):nav(RS,Q.length,i,false));
+  app.innerHTML=layout(`${top}<div class="card">${b}<div id="fb"></div><div class="ft${rv?' rv':''}">${foot}</div></div>`,rv?nav(REC.res,Q.length,i,true):nav(RS,Q.length,i,false));
   if(q.type==='drag'){P=q.pairs.map(()=>null);drawDrag()}
   if(q.type==='sort'){P=q.items.map(()=>null);SS=null;drawSort()}
   if(isConn(q)){P=q.pairs.map(()=>null);RV=q.rv=q.rv||shuf(q.pairs.map(x=>x[1]));CS=null;drawConn()}

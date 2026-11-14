@@ -278,5 +278,6 @@ body.zlock{overflow:hidden}
   .opts.imgs.n3 .opt.pic .zb{top:142px}
 }
 
-.qtitle{font-weight:800;font-size:20px;color:var(--ink);padding:4px 2px 0;line-height:1.3}
-@media(max-width:560px){.qtitle{font-size:17px}}
+.qname{flex:1 1 0;min-width:0;text-align:right;font-weight:800;font-size:18px;line-height:1.2;color:var(--ink);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.qname[hidden]{display:none}
+@media(max-width:560px){.qname{font-size:14px}}
