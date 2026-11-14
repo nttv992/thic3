@@ -3,7 +3,7 @@ window.SITE_DATA = {
   "siteIcon": "🚀",
   "groups": [
     {
-      "name": "Tiểu học",
+      "name": "THCS",
       "programs": [
         {
           "title": "Chương trình IC3 GS6",
@@ -11,7 +11,7 @@ window.SITE_DATA = {
           "levels": [
             {
               "name": "Level 1",
-              "icon": "🪴",
+              "icon": "🌳",
               "color": "green",
               "reviewTitle": "Level 1",
               "docUrl": "",
