@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Bài 19 — Sự cần thiết của bảo mật</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fbfaff;--surface:#fff;--ink:#2b2b2b;--muted:#5d5873;--purple:#6b3fa0;--lilac:#e9e4ff;--yellow:#fdd118;--pink:#ff2d6b;--green:#00864a;--line:#ddd7f2;--ok:#e3f6ec;--bad:#ffe4ec;color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#17132a;--surface:#221c3b;--ink:#f1eefc;--muted:#b9b2d6;--purple:#c3a5ff;--lilac:#2d2552;--line:#3b3263;--green:#4fd18b;--ok:#17382a;--bad:#44202f;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#17132a;--surface:#221c3b;--ink:#f1eefc;--muted:#b9b2d6;--purple:#c3a5ff;--lilac:#2d2552;--line:#3b3263;--green:#4fd18b;--ok:#17382a;--bad:#44202f;color-scheme:dark}
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:calc(64px + env(safe-area-inset-top,0px));scroll-behavior:smooth}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 17px/1.65 "Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",sans-serif}
+h1,h2,h3{line-height:1.25;margin:0 0 .5em}
+h1{font-size:clamp(2rem,6vw,3.4rem);font-weight:800;color:var(--purple)}
+h2{font-size:clamp(1.5rem,4vw,2.1rem);font-weight:800;color:var(--purple)}
+h3{font-size:1.15rem;font-weight:700}
+p{margin:0 0 1em;max-width:68ch}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--pink);outline-offset:2px}
+nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--surface);border-bottom:1px solid var(--line);display:flex;gap:4px;align-items:center;padding:8px 16px;overflow-x:auto}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--surface);z-index:21}
+nav b{margin-right:auto;white-space:nowrap;color:var(--purple)}
+nav a,nav button{white-space:nowrap;text-decoration:none;padding:6px 12px;border-radius:99px;font:500 .9rem inherit;color:var(--ink);background:none;border:0;cursor:pointer}
+nav a:hover,nav button:hover{background:var(--lilac)}
+nav a.on{background:var(--yellow);color:#2b2b2b;font-weight:700}
+a.btn{text-decoration:none;display:inline-block}
+html{font-size:112.5%}
+html,body{height:100%;overflow:hidden}
+body{display:flex;flex-direction:column;font-size:1rem;line-height:1.55}
+nav{flex:none}
+main{flex:1;min-height:0;width:100%;max-width:none;padding:0 5px;display:flex;flex-direction:column}
+.tag{align-self:flex-start}
+main section,main section.hero{flex:1;min-height:0;overflow-y:auto;display:flex;flex-direction:column;padding:12px 0 0}
+main section[hidden]{display:none}
+footer{display:none}
+.pager{display:flex;justify-content:space-between;gap:12px;margin-top:auto;padding:14px 0}
+h1{font-size:clamp(1.8rem,5vw,2.6rem)}
+h2{font-size:clamp(1.3rem,3.5vw,1.7rem)}
+h3{margin:.8em 0 .3em}
+h3[style]{margin-top:12px!important}
+p{margin:0 0 .6em}
+.grid{margin:8px 0 12px;gap:10px}
+.box{padding:12px 16px}
+.lab{padding:16px;margin:8px 0}
+.quiz{padding:16px;margin:0}
+.opt{padding:7px 10px;margin:6px 0}
+.rule{padding:16px}
+.key{margin:12px 0}
+ul.ticks li{padding:3px 0 3px 28px}
+ul.row{display:flex;flex-wrap:wrap;gap:4px 24px}
+.goals{margin-top:16px}
+.quiz .btn:not([hidden]){display:block;margin-left:auto}
+.lock{opacity:.45;pointer-events:none}
+nav a.lock::after{content:" 🔒";font-size:.8em}
+nav a.done::after{content:" ✓";color:var(--green);font-weight:800}
+.btn.alt{background:var(--yellow);color:#2b2b2b!important}
+main section.play>*:not(.act):not(.pager){display:none}
+main section:not(.play) .act{display:none}
+.sr{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:6px 12px;padding:6px 12px;border:2px solid var(--line);border-radius:10px;margin:5px 0;background:var(--bg)}
+.sr.ok{background:var(--ok);border-color:var(--green)}
+.sb{display:flex;gap:8px}
+.chip{font:inherit;font-size:.9rem;font-weight:700;border:2px solid var(--line);background:var(--surface);color:var(--ink);border-radius:99px;padding:4px 14px;cursor:pointer}
+.chip.ok{background:var(--ok);border-color:var(--green)}
+.chip.bad{background:var(--bad);border-color:var(--pink);text-decoration:line-through}
+.chip:disabled{cursor:default}
+.sw{flex-basis:100%;color:var(--muted)}
+button.pb{width:100%;text-align:left;font:inherit;color:inherit}
+button.pb:disabled{cursor:default}
+.why{font-weight:500;margin:8px 0 0;min-height:1.5em}
+.fin{font-weight:700;color:var(--green);margin:10px 0 0}
+main section h2{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.pic{flex:none;display:block}
+.pic svg{display:block;width:64px;height:64px}
+#gioi-thieu{position:relative}
+.pic.big{position:absolute;right:8px;top:12px}
+.pic.big svg{width:170px;height:170px}
+@media(min-width:701px){#gioi-thieu h1,#gioi-thieu .lead{padding-right:190px}}
+@media(max-width:700px){.pic.big{display:none}}
+.pic .p{fill:var(--purple)}.pic .y{fill:var(--yellow)}.pic .k{fill:var(--pink)}.pic .g{fill:var(--green)}.pic .l{fill:var(--lilac)}.pic .w{fill:var(--surface)}.pic .tp{fill:var(--purple)}
+.pic .ln{stroke:var(--line);stroke-width:3}
+.pic .sy{fill:none;stroke:var(--yellow);stroke-width:6;stroke-linecap:round}
+.pic .sc{fill:none;stroke:var(--bg);stroke-width:6;stroke-linecap:round;stroke-linejoin:round}
+#bar{position:absolute;left:0;bottom:-1px;height:3px;width:0;background:var(--pink)}
+main{max-width:none;margin:0 auto;padding:0 40px 20px}
+section{padding:56px 0 8px}
+.hero{padding:56px 0 24px}
+.tag{display:inline-block;background:var(--yellow);color:#2b2b2b;font-weight:700;padding:4px 14px;border-radius:99px;margin-bottom:16px}
+.lead{font-size:1.2rem;color:var(--muted)}
+.goals{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));margin-top:24px}
+.box{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px 20px}
+.box.lilac{background:var(--lilac);border-color:transparent}
+.grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));margin:16px 0 24px}
+ul.ticks{list-style:none;padding:0;margin:0}
+ul.ticks li{padding:6px 0 6px 28px;position:relative}
+ul.ticks li::before{content:"✓";position:absolute;left:0;color:var(--green);font-weight:800}
+ul.cross li::before{content:"✕";color:var(--pink)}
+.key{border-left:6px solid var(--yellow);background:var(--surface);padding:14px 18px;border-radius:0 12px 12px 0;margin:20px 0}
+.lab{background:var(--lilac);border-radius:18px;padding:22px;margin:20px 0}
+.lab input[type=text]{width:100%;font:500 1.1rem inherit;padding:12px 14px;border:2px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink)}
+.meter{height:12px;border-radius:99px;background:var(--line);margin:14px 0;overflow:hidden}
+.meter i{display:block;height:100%;width:0;background:var(--pink);transition:width .25s,background .25s}
+.checks{display:grid;gap:4px 16px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));list-style:none;padding:0;margin:0}
+.checks li::before{content:"○ ";color:var(--muted)}
+.checks li.on{color:var(--green);font-weight:500}
+.checks li.on::before{content:"● "}
+.small{font-size:.9rem;color:var(--muted)}
+.rules{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));margin:20px 0}
+.rule{background:var(--purple);color:#fff;border-radius:16px;padding:22px 18px;text-align:center;font-weight:700;font-size:1.15rem}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .rule{color:#17132a}}
+:root[data-theme="dark"] .rule{color:#17132a}
+.quiz{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:20px;margin:0 0 20px}
+.quiz h3{display:flex;gap:12px;align-items:flex-start}
+.quiz h3 span{flex:none;width:34px;height:34px;border-radius:50%;background:var(--yellow);color:#2b2b2b;display:grid;place-items:center;font-weight:800}
+.opt{display:flex;gap:12px;align-items:flex-start;padding:10px 12px;border:2px solid var(--line);border-radius:10px;margin:8px 0;cursor:pointer;background:var(--bg)}
+.opt input{margin-top:6px;accent-color:var(--purple)}
+.opt.ok{background:var(--ok);border-color:var(--green)}
+.opt.bad{background:var(--bad);border-color:var(--pink)}
+.opt.miss{border-style:dashed;border-color:var(--green)}
+.btn{font:700 1rem inherit;background:var(--purple);color:#fff;border:0;border-radius:99px;padding:10px 22px;cursor:pointer}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .btn{color:#17132a}}
+:root[data-theme="dark"] .btn{color:#17132a}
+.fb{margin-top:12px;font-weight:500}
+footer{text-align:center;color:var(--muted);padding:32px 20px;border-top:1px solid var(--line)}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.meter i{transition:none}}
+</style>
+</head>
+<body>
+<nav>
+<b>IC3 GS6 · Bài 19</b>
+<a href="#gioi-thieu">Giới thiệu</a><a href="#mat-khau">Mật khẩu</a><a href="#thu">Thử mật khẩu</a><a href="#luu-y">Lưu ý</a><a href="#ai">Dữ liệu và AI</a><a href="#cong-cong">Máy tính chung</a><a href="#nguyen-tac">Nguyên tắc vàng</a><a href="#van-dung">Vận dụng</a>
+<button id="theme" type="button" aria-label="Đổi giao diện sáng hoặc tối">Sáng/Tối</button>
+<div id="bar"></div>
+</nav>
+<main>
+<section id="gioi-thieu" class="hero">
+<span class="tag">Chủ đề: An toàn bảo mật</span>
+<h1>Sự cần thiết của bảo mật</h1>
+<p class="lead">Sau bài này, em biết tạo mật khẩu an toàn, biết loại thông tin không nên đưa cho AI và biết cách bảo vệ tài khoản khi dùng máy tính chung.</p>
+<p class="small">Mỗi phần có một thử thách. Hoàn thành thử thách để mở khóa phần tiếp theo.</p><div class="goals">
+<div class="box lilac"><h3>Phần 1</h3>Bảo mật thông tin</div>
+<div class="box lilac"><h3>Phần 2</h3>Bảo mật thông tin khi sử dụng máy tính công cộng</div>
+<div class="box lilac"><h3>Vận dụng</h3>7 câu hỏi luyện tập</div>
+</div>
+</section>
+
+<section id="mat-khau">
+<h2>1. Bảo mật thông tin</h2>
+<h3>Tại sao bảo mật quan trọng?</h3>
+<ul class="ticks row"><li>Bảo vệ thiết bị</li><li>Bảo vệ tài khoản</li><li>Bảo vệ dữ liệu cá nhân khỏi truy cập trái phép</li></ul>
+
+<h3 style="margin-top:28px">Mật khẩu an toàn gồm các yếu tố</h3>
+<div class="grid">
+<div class="box"><b>Độ dài</b><br>Tối thiểu 8 kí tự. 16 kí tự được coi là an toàn nhất.</div>
+<div class="box"><b>Dùng mức dài nhất</b><br>Chọn mật khẩu hoặc cụm mật khẩu dài nhất mà hệ thống cho phép.</div>
+<div class="box"><b>Đa dạng kí tự</b><br>Kết hợp số, chữ cái, kí hiệu, chữ in hoa và chữ thường.</div>
+</div>
+
+</section><section id="thu"><h2>Thử mật khẩu của em</h2><div class="lab">
+<h3>Thử ngay: kiểm tra độ mạnh của mật khẩu</h3>
+<label for="pw" class="small">Mục tiêu: gõ một mật khẩu đạt đủ 6 tiêu chí để mở phần tiếp theo. Trang này chạy ngay trên máy của em và không gửi đi đâu, nhưng em vẫn không nên nhập mật khẩu thật của mình.</label>
+<input id="pw" type="text" autocomplete="off" spellcheck="false" placeholder="Ví dụ: Mèo&amp;Cá#2026!abc">
+<div class="meter"><i id="mi"></i></div>
+<p id="ml" style="margin:0 0 10px;font-weight:700">Hãy gõ thử để xem kết quả</p>
+<ul class="checks" id="ck">
+<li data-k="len8">Có ít nhất 8 kí tự</li><li data-k="len16">Có từ 16 kí tự (an toàn nhất)</li>
+<li data-k="up">Có chữ in hoa</li><li data-k="lo">Có chữ thường</li>
+<li data-k="num">Có chữ số</li><li data-k="sym">Có kí hiệu đặc biệt</li>
+</ul>
+</div>
+
+</section><section id="luu-y"><h2>Giữ mật khẩu an toàn</h2><h3>Một số lưu ý cho mật khẩu an toàn</h3>
+<div class="grid">
+<div class="box"><ul class="ticks"><li>Khó đoán bởi người hoặc máy tính</li><li>Không dùng thông tin cá nhân</li><li>Dùng mật khẩu khác nhau cho các tài khoản khác nhau</li></ul></div>
+<div class="box"><ul class="ticks"><li>Kết hợp xác thực đa yếu tố</li><li>Thay đổi mật khẩu thường xuyên</li></ul></div>
+</div>
+
+<h3>Khi nào nên thay đổi mật khẩu?</h3>
+<div class="grid">
+<div class="box">Khi quá lâu chưa đổi. Thời gian khuyến nghị là <b>3–6 tháng</b>.</div>
+<div class="box">Khi máy tính bị nhiễm phần mềm độc hại.</div>
+<div class="box">Khi có cảnh báo người lạ xâm nhập tài khoản.</div>
+</div>
+</section>
+
+<section id="ai">
+<h2>Khi sử dụng AI, dữ liệu đi đâu?</h2>
+<ul class="ticks">
+<li>Dữ liệu nhập vào AI có thể được gửi đến hệ thống xử lý và lưu trữ.</li>
+<li>Dữ liệu có thể được lưu lại tùy theo chính sách dịch vụ của công cụ AI.</li>
+<li>Vì vậy, cần cân nhắc kỹ trước khi cung cấp thông tin cho AI.</li>
+</ul>
+<h3 style="margin-top:24px">Dữ liệu tuyệt đối không nên nhập vào AI</h3>
+<div class="grid">
+<div class="box"><ul class="ticks cross"><li>Mật khẩu</li><li>Mã OTP</li><li>Số điện thoại</li></ul></div>
+<div class="box"><ul class="ticks cross"><li>Địa chỉ nhà</li><li>Thông tin tài khoản</li><li>Các dữ liệu nhạy cảm hoặc thông tin riêng tư</li></ul></div>
+</div>
+<div class="key"><b>Thông điệp quan trọng:</b> Không đưa thông tin bí mật, thông tin cá nhân hoặc dữ liệu nhạy cảm vào AI nếu không thực sự cần thiết. Hãy luôn kiểm tra chính sách bảo mật của dịch vụ trước khi sử dụng.</div>
+</section>
+
+<section id="cong-cong">
+<h2>2. Bảo mật thông tin khi sử dụng máy tính công cộng</h2>
+<h3>Cần lưu ý</h3>
+<ul class="ticks"><li>Không lưu thông tin đăng nhập</li><li>Đăng xuất ngay sau khi sử dụng</li><li>Tránh lưu dữ liệu trên ổ cứng</li><li>Xóa cookie, bộ nhớ cache và lịch sử duyệt Web</li><li>Chú ý xung quanh khi đang sử dụng</li></ul>
+
+<h3 style="margin-top:28px">Rủi ro khi người khác dùng tài khoản của em</h3>
+<div class="grid">
+<div class="box"><b>Lịch sử hội thoại</b><br>Người khác có thể xem.</div>
+<div class="box"><b>Tệp đã tải lên</b><br>Người khác có thể mở các tệp em đã tải lên.</div>
+<div class="box"><b>Nội dung riêng</b><br>Người khác biết được nội dung học tập hoặc thông tin riêng tư của em.</div>
+</div>
+
+</section><section id="nguyen-tac"><h2>Nguy cơ và ba nguyên tắc vàng</h2><h3>Nguy cơ khi dùng máy tính chung</h3>
+<p>Không lưu mật khẩu trên máy tính ở trường, thư viện hoặc quán net. Nếu lưu mật khẩu, người dùng sau có thể đăng nhập vào tài khoản của em.</p>
+
+<h3>Ba nguyên tắc vàng</h3>
+<div class="rules"><div class="rule">Đăng xuất</div><div class="rule">Không lưu mật khẩu</div><div class="rule">Không chia sẻ tài khoản</div></div>
+<p class="small">Không chia sẻ tài khoản với bạn bè hoặc người khác. Ba việc này giúp bảo vệ tài khoản và dữ liệu của em.</p>
+</section>
+
+<section id="van-dung">
+<h2>Vận dụng</h2>
+<p>Chọn đúng số đáp án theo yêu cầu, rồi bấm “Kiểm tra”.</p>
+<div id="quizzes"></div>
+<div class="box lilac" id="total" hidden></div>
+</section>
+</main>
+<footer>IC3 GS6 Level 1 · Bài 19 · Sự cần thiết của bảo mật</footer>
+
+<script>
+(function(){
+var root=document.documentElement;
+document.getElementById('theme').onclick=function(){
+  var dark=root.getAttribute('data-theme')==='dark'||(!root.getAttribute('data-theme')&&matchMedia('(prefers-color-scheme: dark)').matches);
+  root.setAttribute('data-theme',dark?'light':'dark');
+};
+var okSet={};
+function reach(){for(var i=0;i<ids.length;i++)if(!okSet[ids[i]])return i;return ids.length-1}
+function refresh(){var r=reach();links.forEach(function(a,i){a.classList.toggle('lock',i>r);a.classList.toggle('done',!!okSet[ids[i]]);if(i>r)a.setAttribute('aria-disabled','true');else a.removeAttribute('aria-disabled')});document.querySelectorAll('[data-next]').forEach(function(b){var lk=!okSet[ids[+b.dataset.next]];b.classList.toggle('lock',lk);b.textContent=lk?'Tiếp theo 🔒':'Tiếp theo'})}
+function complete(id){if(okSet[id])return;okSet[id]=1;refresh();var m=document.getElementById(id).querySelector('.fin');if(m)m.hidden=false}
+var ids=['gioi-thieu','mat-khau','thu','luu-y','ai','cong-cong','nguyen-tac','van-dung'],links=document.querySelectorAll('nav a');
+ids.forEach(function(s,i){var d=document.createElement('div');d.className='pager';d.innerHTML=(i?'<a class="btn" href="#'+ids[i-1]+'">Trước</a>':'<span></span>')+(i<ids.length-1?'<a class="btn" href="#'+ids[i+1]+'" data-next="'+i+'">Tiếp theo</a>':'');document.getElementById(s).appendChild(d)});
+function show(){refresh();var id=location.hash.slice(1);if(ids.indexOf(id)<0)id=ids[0];var rc=reach();if(ids.indexOf(id)>rc){id=ids[rc];try{history.replaceState(null,'','#'+id)}catch(e){}}ids.forEach(function(s){document.getElementById(s).hidden=s!==id});links.forEach(function(a){var on=a.getAttribute('href')==='#'+id;a.classList.toggle('on',on);if(on)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current')});document.getElementById(id).scrollTop=0;document.getElementById('bar').style.width=((ids.indexOf(id)+1)/ids.length*100)+'%'}
+addEventListener('hashchange',show);show();
+var FIN='<p class="fin" hidden>✓ Hoàn thành! Bấm “Tiếp theo” để sang phần sau.</p>';
+function mk(id,html){var s=document.getElementById(id),d=document.createElement('div');d.className='act';d.innerHTML=html+FIN;var pg=s.querySelector('.pager');s.insertBefore(d,pg);var b=document.createElement('button');b.type='button';b.className='btn alt';b.textContent='Thử thách';b.onclick=function(){var p=s.classList.toggle('play');b.textContent=p?'Xem nội dung':'Thử thách';s.scrollTop=0};pg.insertBefore(b,pg.children[1]||null);return d}
+function sorter(id,title,L,items){var d=mk(id,'<h3>'+title+'</h3><div class="sl"></div>'),box=d.querySelector('.sl'),left=items.length;items.forEach(function(it){var r=document.createElement('div');r.className='sr';r.innerHTML='<span>'+it.t+'</span><span class="sb"><button type="button" class="chip">'+L[0]+'</button><button type="button" class="chip">'+L[1]+'</button></span><small class="sw"></small>';var bs=r.querySelectorAll('button'),w=r.querySelector('.sw');bs.forEach(function(b,k){b.onclick=function(){if(k===it.a){b.classList.add('ok');r.classList.add('ok');bs.forEach(function(x){x.disabled=true});w.textContent='Đúng. '+it.w;if(--left===0)complete(id)}else{b.classList.add('bad');b.disabled=true;w.textContent='Chưa đúng, em thử lại nhé.'}}});box.appendChild(r)})}
+function pick(id,q,opts,a,w){var d=mk(id,'<h3>'+q+'</h3><div class="po"></div><p class="why"></p>'),why=d.querySelector('.why');opts.forEach(function(o,i){var b=document.createElement('button');b.type='button';b.className='opt pb';b.textContent=o;b.onclick=function(){if(i===a){b.classList.add('ok');d.querySelectorAll('.pb').forEach(function(x){x.disabled=true});why.textContent='Chính xác! '+w;complete(id)}else{b.classList.add('bad');b.disabled=true;why.textContent='Chưa đúng, em thử lại nhé.'}};d.querySelector('.po').appendChild(b)})}
+document.querySelector('#thu .lab').insertAdjacentHTML('beforeend',FIN);
+pick('gioi-thieu','Khởi động: vì sao cần bảo mật thông tin?',['Để máy tính chạy nhanh hơn','Để bảo vệ thiết bị, tài khoản và dữ liệu cá nhân','Để có thêm nhiều bạn trên mạng'],1,'Bảo mật giúp bảo vệ thiết bị, tài khoản và dữ liệu cá nhân khỏi truy cập trái phép.');
+pick('mat-khau','Thử thách: mật khẩu nào an toàn nhất?',['123456','nguyenvana2012','Meo&Ca#2026!abcd','matkhau'],2,'Mật khẩu này dài 16 kí tự, có chữ hoa, chữ thường, số, kí hiệu và không dùng thông tin cá nhân.');
+sorter('luu-y','Thử thách: có nên đổi mật khẩu ngay không?',['Đổi ngay','Chưa cần'],[{t:'Máy tính vừa bị nhiễm phần mềm độc hại',a:0,w:'Mật khẩu có thể đã bị đánh cắp.'},{t:'Mới đổi mật khẩu tuần trước, mọi thứ bình thường',a:1,w:'Mật khẩu còn mới và không có dấu hiệu bất thường.'},{t:'Có cảnh báo người lạ xâm nhập tài khoản',a:0,w:'Cần đổi ngay để chặn người lạ.'},{t:'Đã 8 tháng chưa đổi mật khẩu',a:0,w:'Nên đổi sau mỗi 3–6 tháng.'}]);
+sorter('ai','Thử thách: em có nên nhập thông tin này vào AI?',['Nên','Không nên'],[{t:'Mật khẩu tài khoản',a:1,w:'Tuyệt đối không nhập.'},{t:'Câu hỏi về cách giải một bài Toán',a:0,w:'Nội dung học tập chung, không chứa thông tin riêng tư.'},{t:'Mã OTP',a:1,w:'Tuyệt đối không nhập.'},{t:'Địa chỉ nhà',a:1,w:'Đây là thông tin cá nhân.'},{t:'Nhờ AI gợi ý ý tưởng thuyết trình về môi trường',a:0,w:'Không chứa thông tin riêng tư.'},{t:'Số điện thoại',a:1,w:'Đây là thông tin cá nhân.'}]);
+sorter('cong-cong','Thử thách: việc nào nên làm trên máy tính công cộng?',['Nên','Không nên'],[{t:'Lưu thông tin đăng nhập',a:1,w:'Người dùng sau có thể vào tài khoản của em.'},{t:'Đăng xuất ngay sau khi sử dụng',a:0,w:'Chấm dứt phiên làm việc của em.'},{t:'Xóa cookie, bộ nhớ cache và lịch sử duyệt Web',a:0,w:'Không để lại dấu vết trên máy.'},{t:'Lưu bài làm vào ổ cứng của máy',a:1,w:'Tránh lưu dữ liệu trên ổ cứng máy chung.'},{t:'Chú ý người xung quanh khi nhập thông tin',a:0,w:'Tránh bị nhìn trộm.'}]);
+pick('nguyen-tac','Tình huống: em dùng xong máy tính ở thư viện, bạn ngồi cạnh xin đăng nhập tài khoản của em một lát. Em nên làm gì?',['Cho mượn vì là bạn thân','Cho mượn nhưng không đăng xuất','Từ chối, đăng xuất rồi mới rời máy'],2,'Không chia sẻ tài khoản và luôn đăng xuất sau khi dùng.');
+var PIC={'gioi-thieu':'<svg viewBox="0 0 120 120"><path class="p" d="M60 8 104 24v34c0 30-22 48-44 56C38 106 16 88 16 58V24z"/><rect class="y" x="40" y="56" width="40" height="32" rx="7"/><path class="sy" d="M48 56V46a12 12 0 0 1 24 0v10"/><circle class="p" cx="60" cy="71" r="5"/></svg>',
+'mat-khau':'<svg viewBox="0 0 120 120"><rect class="w ln" x="8" y="42" width="104" height="44" rx="12"/><circle class="k" cx="30" cy="64" r="6"/><circle class="k" cx="50" cy="64" r="6"/><circle class="k" cx="70" cy="64" r="6"/><circle class="k" cx="90" cy="64" r="6"/><circle class="y" cx="90" cy="20" r="11"/><circle class="w" cx="90" cy="20" r="4"/><rect class="y" x="40" y="17" width="44" height="6"/><rect class="y" x="44" y="23" width="6" height="9"/><rect class="y" x="56" y="23" width="6" height="7"/></svg>',
+'thu':'<svg viewBox="0 0 120 120"><rect class="k" x="10" y="86" width="14" height="22" rx="4"/><rect class="y" x="32" y="68" width="14" height="40" rx="4"/><rect class="y" x="54" y="50" width="14" height="58" rx="4"/><rect class="g" x="76" y="32" width="14" height="76" rx="4"/><rect class="g" x="98" y="14" width="14" height="94" rx="4"/></svg>',
+'luu-y':'<svg viewBox="0 0 120 120"><rect class="w ln" x="18" y="24" width="84" height="84" rx="12"/><path class="p" d="M18 36a12 12 0 0 1 12-12h60a12 12 0 0 1 12 12v14H18z"/><rect class="y" x="36" y="14" width="8" height="18" rx="4"/><rect class="y" x="76" y="14" width="8" height="18" rx="4"/><text x="60" y="92" text-anchor="middle" class="tp" font-size="28" font-weight="800">3–6</text></svg>',
+'ai':'<svg viewBox="0 0 120 120"><rect class="p" x="26" y="38" width="68" height="52" rx="16"/><rect class="y" x="58" y="20" width="4" height="18"/><circle class="k" cx="60" cy="16" r="6"/><circle class="w" cx="46" cy="62" r="8"/><circle class="w" cx="74" cy="62" r="8"/><circle class="p" cx="46" cy="62" r="3.5"/><circle class="p" cx="74" cy="62" r="3.5"/><rect class="y" x="46" y="78" width="28" height="5" rx="2.5"/><rect class="l" x="12" y="52" width="10" height="22" rx="5"/><rect class="l" x="98" y="52" width="10" height="22" rx="5"/></svg>',
+'cong-cong':'<svg viewBox="0 0 120 120"><rect class="p" x="12" y="20" width="96" height="64" rx="8"/><rect class="l" x="20" y="28" width="80" height="48" rx="4"/><circle class="p" cx="60" cy="46" r="8"/><path class="p" d="M44 72a16 14 0 0 1 32 0z"/><rect class="p" x="52" y="84" width="16" height="12"/><rect class="p" x="36" y="96" width="48" height="8" rx="4"/><circle class="k" cx="100" cy="24" r="14"/><rect class="w" x="98" y="15" width="4" height="12" rx="2"/><circle class="w" cx="100" cy="32" r="2.5"/></svg>',
+'nguyen-tac':'<svg viewBox="0 0 120 120"><circle class="g" cx="24" cy="60" r="20"/><circle class="g" cx="60" cy="60" r="20"/><circle class="g" cx="96" cy="60" r="20"/><path class="sc" d="M14 60l7 7 13-14M50 60l7 7 13-14M86 60l7 7 13-14"/></svg>',
+'van-dung':'<svg viewBox="0 0 120 120"><path class="y" d="M38 20h44v30c0 16-10 26-22 26S38 66 38 50z"/><path class="sy" d="M38 28H26c0 14 6 22 14 24M82 28h12c0 14-6 22-14 24"/><rect class="y" x="54" y="76" width="12" height="14"/><rect class="p" x="38" y="90" width="44" height="12" rx="5"/><path class="k" d="M60 30l4 9 10 1-8 7 3 10-9-5-9 5 3-10-8-7 10-1z"/></svg>'};
+ids.forEach(function(id){var s=document.getElementById(id);if(id==='gioi-thieu')s.insertAdjacentHTML('afterbegin','<div class="pic big" aria-hidden="true">'+PIC[id]+'</div>');else s.querySelector('h2').insertAdjacentHTML('beforeend','<span class="pic" aria-hidden="true">'+PIC[id]+'</span>')});
+var bar=document.getElementById('bar');
+function prog(){var h=document.documentElement.scrollHeight-innerHeight;bar.style.width=(h>0?scrollY/h*100:0)+'%'}
+
+
+var pw=document.getElementById('pw'),mi=document.getElementById('mi'),ml=document.getElementById('ml'),ck=document.querySelectorAll('#ck li');
+pw.addEventListener('input',function(){
+  var v=pw.value,t={len8:v.length>=8,len16:v.length>=16,up:/\p{Lu}/u.test(v),lo:/\p{Ll}/u.test(v),num:/\d/.test(v),sym:/[^\p{L}\p{N}\s]/u.test(v)},n=0;
+  ck.forEach(function(li){var on=t[li.dataset.k];li.classList.toggle('on',on);if(on)n++});
+  var pct=v?Math.round(n/6*100):0;
+  mi.style.width=pct+'%';
+  mi.style.background=pct<50?'#ff2d6b':pct<84?'#f0a800':'#00a651';
+  ml.textContent=!v?'Hãy gõ thử để xem kết quả':pct<50?'Yếu: dễ bị đoán ra':pct<84?'Trung bình: cần thêm yếu tố':pct<100?'Khá tốt: thử thêm độ dài':'Rất tốt: nhớ chỉ dùng cho một tài khoản';if(pct===100)complete('thu');
+});
+
+var Q=[
+{t:'Bạn cần đảm bảo an toàn cho mật khẩu của mình. Đâu là ba nguyên tắc bạn cần tuân thủ?',n:3,o:['Sử dụng xác thực đa yếu tố, nếu có.','Sử dụng mật khẩu dài nhất hoặc cụm mật khẩu được hệ thống mật khẩu cho phép.','Sử dụng mật khẩu khác nhau cho mỗi tài khoản.','Sử dụng mật khẩu dựa trên thông tin riêng tư cá nhân.','Sử dụng các từ có thể tìm thấy trong từ điển của một ngôn ngữ khác với ngôn ngữ chính của bạn.','Sử dụng mật khẩu phức tạp và ghi vào một cuốn sổ mà bạn luôn mang theo bên mình.'],a:[0,1,2],e:'Thông tin cá nhân dễ bị đoán, từ trong từ điển dễ bị dò ra, và mật khẩu ghi ra sổ có thể bị lộ nếu mất sổ.'},
+{t:'Bạn cần đảm bảo an toàn cho mật khẩu của mình. Đâu là ba nguyên tắc bạn cần tuân thủ?',n:3,o:['Bao gồm họ hoặc tên của bạn.','Bao gồm chữ viết hoa và chữ viết thường.','Bao gồm các chữ cái, chữ số và kí hiệu.','Bao gồm thông tin cá nhân như tên người trong gia đình hoặc tên vật nuôi.','Sử dụng tám kí tự trở lên.','Bao gồm các số dễ nhớ như ngày sinh và số điện thoại.'],a:[1,2,4],e:'Mật khẩu tốt dài từ 8 kí tự, kết hợp hoa, thường, số và kí hiệu, và không dùng thông tin cá nhân.'},
+{t:'Bạn sử dụng máy tính công cộng tại thư viện để kiểm tra Email và số dư tài khoản ngân hàng của mình. Bạn muốn ngăn những người sử dụng máy tính sau đó truy cập vào Email và tài khoản ngân hàng của bạn. Bạn nên hoàn thành hai tác vụ nào trước khi rời khỏi máy tính?',n:2,o:['Xóa bộ đệm ẩn và Cookie của trình duyệt.','Đăng xuất khỏi Email và các trang Web ngân hàng.','Xóa lịch sử trình duyệt.','Đóng tất cả các cửa sổ trình duyệt đang mở.'],a:[0,1],e:'Đăng xuất chấm dứt phiên làm việc, còn xóa cache và cookie loại bỏ dữ liệu đăng nhập còn lưu trên máy. Chỉ đóng cửa sổ hoặc xóa lịch sử thì chưa đủ.'},
+{t:'Đâu là hai hành động bạn có thể thực hiện để giúp duy trì quyền riêng tư kỹ thuật số của bản thân?',n:2,o:['Chỉ sử dụng Email trường học của bạn để gửi thông tin cá nhân.','Tắt GPS trên thiết bị của bạn khi không sử dụng thường xuyên.','Lưu trữ tài liệu cá nhân của bạn trên vị trí lưu trữ đám mây.','Định cấu hình cài đặt trình duyệt Web của bạn để chặn Cookie.'],a:[1,3],e:'Tắt GPS khi không cần giúp hạn chế việc theo dõi vị trí, còn chặn Cookie hạn chế việc theo dõi khi duyệt Web. Gửi thông tin cá nhân qua Email hay lưu tài liệu trên đám mây không tự làm tăng quyền riêng tư.'},
+{t:'Đâu là hai loại thông tin em tuyệt đối không nên nhập vào công cụ AI?',n:2,o:['Mật khẩu tài khoản.','Câu hỏi về một bài tập Toán.','Mã OTP.','Ý tưởng cho bài thuyết trình về môi trường.'],a:[0,2],e:'Dữ liệu nhập vào AI có thể được gửi đi xử lý và lưu lại. Mật khẩu và mã OTP là thông tin bí mật, tuyệt đối không đưa cho AI.'},
+{t:'Đâu là ba trường hợp em nên thay đổi mật khẩu?',n:3,o:['Khi máy tính bị nhiễm phần mềm độc hại.','Khi vừa đổi mật khẩu hôm qua và mọi thứ bình thường.','Khi có cảnh báo người lạ xâm nhập tài khoản.','Khi em vừa đăng nhập thành công.','Khi quá lâu chưa thay đổi mật khẩu (khoảng 3–6 tháng).'],a:[0,2,4],e:'Nên đổi mật khẩu khi nhiễm phần mềm độc hại, khi có cảnh báo xâm nhập, hoặc khi quá lâu chưa đổi (khuyến nghị 3–6 tháng).'},
+{t:'Đâu là ba nguyên tắc vàng khi sử dụng máy tính công cộng?',n:3,o:['Đăng xuất sau khi sử dụng.','Lưu mật khẩu để lần sau đăng nhập nhanh hơn.','Không lưu mật khẩu trên thiết bị chung.','Chia sẻ tài khoản cho bạn thân để cùng làm bài.','Không chia sẻ tài khoản với bạn bè hoặc người khác.'],a:[0,2,4],e:'Đăng xuất, không lưu mật khẩu và không chia sẻ tài khoản là 3 nguyên tắc vàng để bảo vệ tài khoản và dữ liệu.'}
+];
+var L='ABCDEF',box=document.getElementById('quizzes'),done={};
+Q.forEach(function(q,qi){
+  var d=document.createElement('div');d.className='quiz';
+  var h='<h3><span>'+(qi+1)+'</span><div>'+q.t+' <small>(Chọn '+q.n+')</small></div></h3>';
+  q.o.forEach(function(x,i){h+='<label class="opt"><input type="checkbox" value="'+i+'"><span><b>'+L[i]+'.</b> '+x+'</span></label>'});
+  h+='<button class="btn" type="button">Kiểm tra</button><div class="fb" aria-live="polite"></div>';
+  d.innerHTML=h;box.appendChild(d);d.hidden=qi>0;
+  var inputs=d.querySelectorAll('input'),btn=d.querySelector('button'),fb=d.querySelector('.fb');
+  inputs.forEach(function(inp){inp.addEventListener('change',function(){
+    var c=d.querySelectorAll('input:checked');
+    if(c.length>q.n){inp.checked=false}
+  })});
+  btn.onclick=function(){
+    var sel=[].map.call(d.querySelectorAll('input:checked'),function(i){return +i.value});
+    if(sel.length!==q.n){fb.textContent='Em cần chọn đúng '+q.n+' đáp án.';return}
+    var right=sel.every(function(s){return q.a.indexOf(s)>-1});
+    d.querySelectorAll('.opt').forEach(function(o,i){
+      var isA=q.a.indexOf(i)>-1,chk=sel.indexOf(i)>-1;
+      o.classList.remove('ok','bad','miss');
+      if(chk)o.classList.add(isA?'ok':'bad');else if(isA&&right)o.classList.add('miss');
+    });
+    if(!right){fb.textContent='Chưa đúng, em chọn lại nhé.';setTimeout(function(){d.querySelectorAll('.opt').forEach(function(o){o.classList.remove('ok','bad','miss')});inputs.forEach(function(i){i.checked=false})},1200);return}inputs.forEach(function(i){i.disabled=true});btn.hidden=true;
+    fb.textContent=(right?'Chính xác! ':'Chưa đúng. Đáp án là '+q.a.map(function(i){return L[i]}).join(', ')+'. ')+q.e;
+    done[qi]=right;var nx=box.children[qi+1];if(nx){var b=document.createElement('button');b.className='btn';b.type='button';b.style.marginTop='12px';b.textContent='Câu tiếp theo';b.onclick=function(){d.hidden=true;nx.hidden=false};d.appendChild(b)}
+    if(Object.keys(done).length===Q.length){
+      var s=Object.keys(done).filter(function(k){return done[k]}).length,t=document.getElementById('total');
+      t.hidden=false;complete('van-dung');t.innerHTML='<h3>🎉 Hoàn thành bài học!</h3><b>Kết quả: '+s+'/'+Q.length+' câu đúng.</b> '+(s===Q.length?'Em đã nắm vững bài học.':'Hãy xem lại các phần trên rồi thử lại bằng cách tải lại trang.');
+    }
+  };
+});
+})();
+</script>
+</body>
+</html>
