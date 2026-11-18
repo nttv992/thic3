@@ -34,13 +34,24 @@ window.SITE_DATA = {
                   ]
                 },
                 {
-                  "title": "Chủ đề: Truyền thông",
+                  "title": "Chủ đề: Giao tiếp kỹ thuật số",
                   "lessons": [
                     {
-                      "nums": "*",
+                      "nums": "1",
                       "name": "Ôn tập",
                       "lessonUrl": "",
                       "reviewUrl": "quiz.html?q=lv1_cd4"
+                    }
+                  ]
+                },
+                {
+                  "title": "Chủ đề: An toàn và bảo mật",
+                  "lessons": [
+                    {
+                      "nums": "Bài 19",
+                      "name": " Sự cần thiết của bảo mật",
+                      "lessonUrl": "https://nttv992.github.io/thic3/lesson/level%201/lv1_19",
+                      "reviewUrl": ""
                     }
                   ]
                 }
