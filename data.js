@@ -52,6 +52,18 @@ window.SITE_DATA = {
                       "name": " Sự cần thiết của bảo mật",
                       "lessonUrl": "https://nttv992.github.io/thic3/lesson/level%201/lv1_19",
                       "reviewUrl": ""
+                    },
+                    {
+                      "nums": "Bài 20",
+                      "name": "Xác định rủi ro",
+                      "lessonUrl": "",
+                      "reviewUrl": ""
+                    },
+                    {
+                      "nums": "Bài 21",
+                      "name": "Phòng chống và giảm thiểu rủi ro",
+                      "lessonUrl": "https://nttv992.github.io/thic3/lesson/level%201/lv1_21",
+                      "reviewUrl": ""
                     }
                   ]
                 }
