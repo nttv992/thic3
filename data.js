@@ -48,6 +48,12 @@ window.SITE_DATA = {
                   "title": "Chủ đề: An toàn và bảo mật",
                   "lessons": [
                     {
+                      "nums": "Bài 12",
+                      "name": "Tìm kiếm thông tin",
+                      "lessonUrl": "https://nttv992.github.io/thic3/lesson/level%201/lv1_12",
+                      "reviewUrl": ""
+                    },
+                    {
                       "nums": "Bài 19",
                       "name": " Sự cần thiết của bảo mật",
                       "lessonUrl": "https://nttv992.github.io/thic3/lesson/level%201/lv1_19",
