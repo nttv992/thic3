@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Bài 21 — Phòng chống và giảm thiểu rủi ro</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fbfaff;--surface:#fff;--ink:#2b2b2b;--muted:#5d5873;--purple:#6b3fa0;--lilac:#e9e4ff;--yellow:#fdd118;--pink:#ff2d6b;--green:#00864a;--line:#ddd7f2;--ok:#e3f6ec;--bad:#ffe4ec;color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#17132a;--surface:#221c3b;--ink:#f1eefc;--muted:#b9b2d6;--purple:#c3a5ff;--lilac:#2d2552;--line:#3b3263;--green:#4fd18b;--ok:#17382a;--bad:#44202f;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#17132a;--surface:#221c3b;--ink:#f1eefc;--muted:#b9b2d6;--purple:#c3a5ff;--lilac:#2d2552;--line:#3b3263;--green:#4fd18b;--ok:#17382a;--bad:#44202f;color-scheme:dark}
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:calc(64px + env(safe-area-inset-top,0px));scroll-behavior:smooth}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 17px/1.65 "Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",sans-serif}
+h1,h2,h3{line-height:1.25;margin:0 0 .5em}
+h1{font-size:clamp(2rem,6vw,3.4rem);font-weight:800;color:var(--purple)}
+h2{font-size:clamp(1.5rem,4vw,2.1rem);font-weight:800;color:var(--purple)}
+h3{font-size:1.15rem;font-weight:700}
+p{margin:0 0 1em;max-width:68ch}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--pink);outline-offset:2px}
+nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--surface);border-bottom:1px solid var(--line);display:flex;gap:4px;align-items:center;padding:8px 16px;overflow-x:auto}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--surface);z-index:21}
+nav b{margin-right:auto;white-space:nowrap;color:var(--purple)}
+nav a,nav button{white-space:nowrap;text-decoration:none;padding:6px 12px;border-radius:99px;font:500 .9rem inherit;color:var(--ink);background:none;border:0;cursor:pointer}
+nav a:hover,nav button:hover{background:var(--lilac)}
+nav a.on{background:var(--yellow);color:#2b2b2b;font-weight:700}
+a.btn{text-decoration:none;display:inline-block}
+html{font-size:112.5%}
+html,body{height:100%;overflow:hidden}
+body{display:flex;flex-direction:column;font-size:1rem;line-height:1.55}
+nav{flex:none}
+main{flex:1;min-height:0;width:100%;max-width:none;padding:0 5px;display:flex;flex-direction:column}
+.tag{align-self:flex-start}
+main section,main section.hero{flex:1;min-height:0;overflow-y:auto;display:flex;flex-direction:column;padding:12px 0 0}
+main section[hidden]{display:none}
+footer{display:none}
+.pager{display:flex;justify-content:space-between;gap:12px;margin-top:auto;padding:14px 0}
+h1{font-size:clamp(1.8rem,5vw,2.6rem)}
+h2{font-size:clamp(1.3rem,3.5vw,1.7rem)}
+h3{margin:.8em 0 .3em}
+h3[style]{margin-top:12px!important}
+p{margin:0 0 .6em}
+.grid{margin:8px 0 12px;gap:10px}
+.box{padding:12px 16px}
+.lab{padding:16px;margin:8px 0}
+.quiz{padding:16px;margin:0}
+.opt{padding:7px 10px;margin:6px 0}
+.rule{padding:16px}
+.key{margin:12px 0}
+ul.ticks li{padding:3px 0 3px 28px}
+ul.row{display:flex;flex-wrap:wrap;gap:4px 24px}
+.goals{margin-top:16px}
+.quiz .btn:not([hidden]){display:block;margin-left:auto}
+.lock{opacity:.45;pointer-events:none}
+nav a.lock::after{content:" 🔒";font-size:.8em}
+nav a.done::after{content:" ✓";color:var(--green);font-weight:800}
+.btn.alt{background:var(--yellow);color:#2b2b2b!important}
+main section.play>*:not(.act):not(.pager){display:none}
+main section:not(.play) .act{display:none}
+.sr{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:6px 12px;padding:6px 12px;border:2px solid var(--line);border-radius:10px;margin:5px 0;background:var(--bg)}
+.sr.ok{background:var(--ok);border-color:var(--green)}
+.sb{display:flex;gap:8px}
+.chip{font:inherit;font-size:.9rem;font-weight:700;border:2px solid var(--line);background:var(--surface);color:var(--ink);border-radius:99px;padding:4px 14px;cursor:pointer}
+.chip.ok{background:var(--ok);border-color:var(--green)}
+.chip.bad{background:var(--bad);border-color:var(--pink);text-decoration:line-through}
+.chip:disabled{cursor:default}
+.sw{flex-basis:100%;color:var(--muted)}
+button.pb{width:100%;text-align:left;font:inherit;color:inherit}
+button.pb:disabled{cursor:default}
+.why{font-weight:500;margin:8px 0 0;min-height:1.5em}
+.fin{font-weight:700;color:var(--green);margin:10px 0 0}
+main section h2{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.pic{flex:none;display:block}
+.pic svg{display:block;width:64px;height:64px}
+#gioi-thieu{position:relative}
+.pic.big{position:absolute;right:8px;top:12px}
+.pic.big svg{width:170px;height:170px}
+@media(min-width:701px){#gioi-thieu h1,#gioi-thieu .lead{padding-right:190px}}
+@media(max-width:700px){.pic.big{display:none}}
+.pic .p{fill:var(--purple)}.pic .y{fill:var(--yellow)}.pic .k{fill:var(--pink)}.pic .g{fill:var(--green)}.pic .l{fill:var(--lilac)}.pic .w{fill:var(--surface)}.pic .tp{fill:var(--purple)}
+.pic .ln{stroke:var(--line);stroke-width:3}
+.pic .sy{fill:none;stroke:var(--yellow);stroke-width:6;stroke-linecap:round}
+.pic .sc{fill:none;stroke:var(--bg);stroke-width:6;stroke-linecap:round;stroke-linejoin:round}
+#bar{position:absolute;left:0;bottom:-1px;height:3px;width:0;background:var(--pink)}
+main{max-width:none;margin:0 auto;padding:0 40px 20px}
+section{padding:56px 0 8px}
+.hero{padding:56px 0 24px}
+.tag{display:inline-block;background:var(--yellow);color:#2b2b2b;font-weight:700;padding:4px 14px;border-radius:99px;margin-bottom:16px}
+.lead{font-size:1.2rem;color:var(--muted)}
+.goals{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));margin-top:24px}
+.box{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px 20px}
+.box.lilac{background:var(--lilac);border-color:transparent}
+.grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));margin:16px 0 24px}
+ul.ticks{list-style:none;padding:0;margin:0}
+ul.ticks li{padding:6px 0 6px 28px;position:relative}
+ul.ticks li::before{content:"✓";position:absolute;left:0;color:var(--green);font-weight:800}
+ul.cross li::before{content:"✕";color:var(--pink)}
+.key{border-left:6px solid var(--yellow);background:var(--surface);padding:14px 18px;border-radius:0 12px 12px 0;margin:20px 0}
+.lab{background:var(--lilac);border-radius:18px;padding:22px;margin:20px 0}
+.lab input[type=text]{width:100%;font:500 1.1rem inherit;padding:12px 14px;border:2px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink)}
+.meter{height:12px;border-radius:99px;background:var(--line);margin:14px 0;overflow:hidden}
+.meter i{display:block;height:100%;width:0;background:var(--pink);transition:width .25s,background .25s}
+.checks{display:grid;gap:4px 16px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));list-style:none;padding:0;margin:0}
+.checks li::before{content:"○ ";color:var(--muted)}
+.checks li.on{color:var(--green);font-weight:500}
+.checks li.on::before{content:"● "}
+.small{font-size:.9rem;color:var(--muted)}
+.rules{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));margin:20px 0}
+.rule{background:var(--purple);color:#fff;border-radius:16px;padding:22px 18px;text-align:center;font-weight:700;font-size:1.15rem}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .rule{color:#17132a}}
+:root[data-theme="dark"] .rule{color:#17132a}
+.quiz{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:20px;margin:0 0 20px}
+.quiz h3{display:flex;gap:12px;align-items:flex-start}
+.quiz h3 span{flex:none;width:34px;height:34px;border-radius:50%;background:var(--yellow);color:#2b2b2b;display:grid;place-items:center;font-weight:800}
+.opt{display:flex;gap:12px;align-items:flex-start;padding:10px 12px;border:2px solid var(--line);border-radius:10px;margin:8px 0;cursor:pointer;background:var(--bg)}
+.opt input{margin-top:6px;accent-color:var(--purple)}
+.opt.ok{background:var(--ok);border-color:var(--green)}
+.opt.bad{background:var(--bad);border-color:var(--pink)}
+.opt.miss{border-style:dashed;border-color:var(--green)}
+.btn{font:700 1rem inherit;background:var(--purple);color:#fff;border:0;border-radius:99px;padding:10px 22px;cursor:pointer}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .btn{color:#17132a}}
+:root[data-theme="dark"] .btn{color:#17132a}
+.fb{margin-top:12px;font-weight:500}
+footer{text-align:center;color:var(--muted);padding:32px 20px;border-top:1px solid var(--line)}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.meter i{transition:none}}
+.art{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 16px;max-height:40vh;overflow:auto}
+.art p{margin:0 0 .6em;max-width:none}
+mark{background:var(--yellow);color:#2b2b2b;border-radius:3px;padding:0 2px}
+code{background:var(--lilac);border-radius:6px;padding:1px 8px;font-weight:700}
+.yn{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:6px 12px;padding:8px 12px;border:2px solid var(--line);border-radius:10px;margin:6px 0;background:var(--bg)}
+.yn.ok{background:var(--ok);border-color:var(--green)}.yn.bad{background:var(--bad);border-color:var(--pink)}
+.chip input{accent-color:var(--purple);margin-right:4px}
+.flow{display:grid;gap:10px;grid-template-columns:1fr auto 1fr auto 1fr;align-items:stretch;margin:12px 0}
+.flow .arrow{display:grid;place-items:center;font-size:1.6rem;color:var(--pink)}
+@media(max-width:700px){.flow{grid-template-columns:1fr}.flow .arrow{transform:rotate(90deg)}}
+.num{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:50%;background:var(--yellow);color:#2b2b2b;font-weight:800;margin-right:8px}
+.pic .sp{fill:none;stroke:var(--purple);stroke-width:8;stroke-linecap:round}
+</style>
+</head>
+<body>
+<nav>
+<b>IC3 GS6 · Bài 21</b>
+<a href="#gioi-thieu">Giới thiệu</a><a href="#phan-mem">Phần mềm độc hại</a><a href="#mang">Kết nối mạng</a><a href="#lua-dao">Lừa đảo</a><a href="#smartphone">Smartphone</a><a href="#ai-5-buoc">AI: 5 bước</a><a href="#ai-cau-hoi">AI: Câu hỏi</a><a href="#ai-ket-qua">AI: Kết quả</a><a href="#van-dung">Vận dụng</a>
+<button id="theme" type="button" aria-label="Đổi giao diện sáng hoặc tối">Sáng/Tối</button>
+<div id="bar"></div>
+</nav>
+<main>
+<section id="gioi-thieu" class="hero">
+<span class="tag">Chủ đề: An toàn bảo mật</span>
+<h1>Phòng chống và giảm thiểu rủi ro</h1>
+<p class="lead">Sau bài này, em biết cách giảm thiểu rủi ro từ phần mềm độc hại, kết nối mạng, lừa đảo, khi dùng Smartphone và khi sử dụng AI.</p>
+<p class="small">Mỗi phần có một thử thách. Hoàn thành thử thách để mở khóa phần tiếp theo.</p><div class="goals">
+<div class="box lilac"><h3>Phần 1</h3>Rủi ro từ phần mềm độc hại</div>
+<div class="box lilac"><h3>Phần 2</h3>Rủi ro kết nối mạng</div>
+<div class="box lilac"><h3>Phần 3</h3>Rủi ro lừa đảo</div>
+<div class="box lilac"><h3>Phần 4</h3>Rủi ro khi dùng Smartphone</div>
+<div class="box lilac"><h3>Phần 5</h3>Phòng chống rủi ro khi dùng AI</div>
+<div class="box lilac"><h3>Vận dụng</h3>5 câu hỏi luyện tập</div>
+</div>
+</section>
+
+<section id="phan-mem">
+<h2>1. Giảm thiểu rủi ro từ phần mềm độc hại</h2>
+<div class="grid">
+<div class="box"><span class="num">1</span>Thường xuyên <b>cập nhật</b> các chương trình phòng chống Virus.</div>
+<div class="box"><span class="num">2</span><b>Quét Virus</b> thường xuyên bằng chương trình chống Virus.</div>
+<div class="box"><span class="num">3</span>Luôn <b>quét tất cả các tập tin</b> được tải về từ Internet.</div>
+<div class="box"><span class="num">4</span>Quét tất cả các thiết bị (<b>USB, CD, DVD</b>,…) kết nối với máy tính.</div>
+<div class="box"><span class="num">5</span>Tải xuống và cài đặt các ứng dụng chống <b>Spyware/Adware</b> miễn phí.</div>
+<div class="box"><span class="num">6</span>Sử dụng <b>Windows Defender</b> để theo dõi hệ thống về phần mềm gián điệp.</div>
+</div>
+</section>
+
+<section id="mang">
+<h2>2. Giảm thiểu rủi ro kết nối mạng</h2>
+<ul class="ticks"><li>Giảm thiểu rủi ro kết nối mạng nghĩa là biết cách sử dụng Internet một cách an toàn để bảo vệ <b>tài khoản, dữ liệu và thiết bị</b> của mình.</li><li>Wi-Fi ở quán cà phê, sân bay hay trung tâm thương mại có thể <b>không được bảo mật</b>. Người khác có thể tìm cách đánh cắp mật khẩu hoặc dữ liệu.</li></ul>
+<div class="grid">
+<div class="box"><b>Không nên kết nối Wi-Fi công cộng</b><br>Mạng công cộng có thể không an toàn.</div>
+<div class="box"><b>Dùng mạng riêng ảo (VPN)</b><br>VPN tạo một đường truyền được <b>mã hóa</b>, giúp dữ liệu an toàn hơn khi phải dùng mạng công cộng.</div>
+</div>
+</section>
+
+<section id="lua-dao">
+<h2>3. Giảm thiểu rủi ro lừa đảo</h2>
+<div class="grid">
+<div class="box"><b>Để giảm thiểu rủi ro lừa đảo, em nên:</b>
+<ul class="ticks"><li>Tìm hiểu về các cách thức lừa đảo.</li><li>Xác định đối tượng trước khi thực hiện theo yêu cầu.</li><li>Xem xét cẩn thận các Email gửi đến.</li></ul></div>
+<div class="box"><b>Một số cách khác:</b>
+<ul class="ticks"><li>Cài đặt tiện ích bổ sung chống lừa đảo của trình duyệt.</li><li>Tránh nhấp vào liên kết trong Email.</li><li>Kiểm tra thanh địa chỉ trang Web bắt đầu bằng tên trang Web hợp pháp.</li></ul></div>
+</div>
+</section>
+
+<section id="smartphone">
+<h2>4. Giảm thiểu rủi ro khi dùng Smartphone</h2>
+<ul class="ticks"><li>Luôn giữ thiết bị bên mình.</li><li>Tải các ứng dụng từ nguồn đáng tin cậy.</li><li>Quản lí quyền ứng dụng khi cài đặt chúng.</li><li>Hạn chế sử dụng Wi-Fi công cộng.</li><li>Bảo mật thiết bị bằng mật mã, vân tay, nhận diện khuôn mặt,…</li><li>Tắt Wi-Fi, Bluetooth và GPS khi không sử dụng.</li></ul>
+</section>
+
+<section id="ai-5-buoc">
+<h2>5. Phòng chống rủi ro khi sử dụng AI: 5 bước</h2>
+<div class="grid">
+<div class="box"><span class="num">1</span><b>Xác định mục đích học tập</b><br>Rõ ràng mục tiêu dùng AI để hỗ trợ học tập (học từ mới, tóm tắt bài).</div>
+<div class="box"><span class="num">2</span><b>Kiểm tra công cụ có được phép không?</b><br>Tuân thủ chính sách của nhà trường và hướng dẫn của giáo viên.</div>
+<div class="box"><span class="num">3</span><b>Loại bỏ dữ liệu cá nhân khỏi prompt</b><br>Tuyệt đối không nhập tên, email, số điện thoại hay thông tin nhạy cảm.</div>
+<div class="box"><span class="num">4</span><b>Đọc và kiểm chứng kết quả</b><br>Không tin hoàn toàn vào AI; so sánh với sách giáo khoa và nguồn tin cậy.</div>
+<div class="box"><span class="num">5</span><b>Ghi nhận hoặc chỉnh sửa trước khi dùng</b><br>Chỉnh sửa bài theo ý hiểu của mình và ghi rõ nguồn tham khảo từ AI.</div>
+</div>
+</section>
+
+<section id="ai-cau-hoi">
+<h2>Những câu hỏi quan trọng khi dùng AI</h2>
+<div class="grid">
+<div class="box"><b>Công cụ này có an toàn không?</b><br>Bảo mật dữ liệu tốt, không chứa mã độc hay phần mềm độc hại.</div>
+<div class="box"><b>Có yêu cầu thông tin cá nhân không?</b><br>Tuyệt đối không cung cấp tên, email, số điện thoại.</div>
+<div class="box"><b>Có cần đăng nhập không?</b><br>Ưu tiên chế độ khách hoặc tài khoản không xác định để bảo vệ danh tính.</div>
+<div class="box"><b>Kết quả có nguồn không?</b><br>Kiểm tra trích dẫn và đối chiếu để đảm bảo thông tin chính xác.</div>
+<div class="box"><b>Nội dung có phù hợp với yêu cầu của giáo viên không?</b><br>Làm đúng đề bài, tuân thủ quy định, không gian lận.</div>
+</div>
+</section>
+
+<section id="ai-ket-qua">
+<h2>Khi nhận được kết quả từ AI</h2>
+<ul class="ticks"><li><b>Tuyệt đối không sao chép nguyên văn:</b> dùng AI như nguồn tham khảo, không copy toàn bộ kết quả vào bài làm.</li><li><b>Đọc lại và đối chiếu:</b> so sánh với sách giáo khoa, tài liệu tin cậy hoặc hỏi lại giáo viên.</li><li><b>Chỉnh sửa theo hiểu biết của mình:</b> diễn đạt lại bằng lời văn và tư duy của chính em.</li></ul>
+<h3>Khi kết quả sai, thiếu hoặc không phù hợp</h3>
+<div class="grid">
+<div class="box"><b>Bỏ</b><br>Bỏ đi những phần thông tin không đúng hoặc không liên quan.</div>
+<div class="box"><b>Hỏi lại rõ ràng hơn</b><br>Đặt lại câu lệnh chi tiết hơn cho AI để nhận kết quả chính xác hơn.</div>
+</div>
+</section>
+
+<section id="van-dung">
+<h2>Vận dụng</h2>
+<p>Chọn đúng số đáp án theo yêu cầu, rồi bấm “Kiểm tra”.</p>
+<div id="quizzes"></div>
+<div class="box lilac" id="total" hidden></div>
+</section>
+</main>
+<footer>IC3 GS6 Level 1 · Bài 21 · Phòng chống và giảm thiểu rủi ro</footer>
+
+<script>
+
+
+(function(){
+var root=document.documentElement;
+document.getElementById('theme').onclick=function(){
+  var dark=root.getAttribute('data-theme')==='dark'||(!root.getAttribute('data-theme')&&matchMedia('(prefers-color-scheme: dark)').matches);
+  root.setAttribute('data-theme',dark?'light':'dark');
+};
+var okSet={};
+function reach(){for(var i=0;i<ids.length;i++)if(!okSet[ids[i]])return i;return ids.length-1}
+function refresh(){var r=reach();links.forEach(function(a,i){a.classList.toggle('lock',i>r);a.classList.toggle('done',!!okSet[ids[i]]);if(i>r)a.setAttribute('aria-disabled','true');else a.removeAttribute('aria-disabled')});document.querySelectorAll('[data-next]').forEach(function(b){var lk=!okSet[ids[+b.dataset.next]];b.classList.toggle('lock',lk);b.textContent=lk?'Tiếp theo 🔒':'Tiếp theo'})}
+function complete(id){if(okSet[id])return;okSet[id]=1;refresh();var m=document.getElementById(id).querySelector('.fin');if(m)m.hidden=false}
+var ids=['gioi-thieu','phan-mem','mang','lua-dao','smartphone','ai-5-buoc','ai-cau-hoi','ai-ket-qua','van-dung'],links=document.querySelectorAll('nav a');
+ids.forEach(function(s,i){var d=document.createElement('div');d.className='pager';d.innerHTML=(i?'<a class="btn" href="#'+ids[i-1]+'">Trước</a>':'<span></span>')+(i<ids.length-1?'<a class="btn" href="#'+ids[i+1]+'" data-next="'+i+'">Tiếp theo</a>':'');document.getElementById(s).appendChild(d)});
+function show(){refresh();var id=location.hash.slice(1);if(ids.indexOf(id)<0)id=ids[0];var rc=reach();if(ids.indexOf(id)>rc){id=ids[rc];try{history.replaceState(null,'','#'+id)}catch(e){}}ids.forEach(function(s){document.getElementById(s).hidden=s!==id});links.forEach(function(a){var on=a.getAttribute('href')==='#'+id;a.classList.toggle('on',on);if(on)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current')});document.getElementById(id).scrollTop=0;document.getElementById('bar').style.width=((ids.indexOf(id)+1)/ids.length*100)+'%'}
+addEventListener('hashchange',show);show();
+var FIN='<p class="fin" hidden>✓ Hoàn thành! Bấm “Tiếp theo” để sang phần sau.</p>';
+function mk(id,html){var s=document.getElementById(id),d=document.createElement('div');d.className='act';d.innerHTML=html+FIN;var pg=s.querySelector('.pager');s.insertBefore(d,pg);var b=document.createElement('button');b.type='button';b.className='btn alt';b.textContent='Thử thách';b.onclick=function(){var p=s.classList.toggle('play');b.textContent=p?'Xem nội dung':'Thử thách';s.scrollTop=0};pg.insertBefore(b,pg.children[1]||null);return d}
+function sorter(id,title,L,items){var d=mk(id,'<h3>'+title+'</h3><div class="sl"></div>'),box=d.querySelector('.sl'),left=items.length;items.forEach(function(it){var r=document.createElement('div');r.className='sr';r.innerHTML='<span>'+it.t+'</span><span class="sb"><button type="button" class="chip">'+L[0]+'</button><button type="button" class="chip">'+L[1]+'</button></span><small class="sw"></small>';var bs=r.querySelectorAll('button'),w=r.querySelector('.sw');bs.forEach(function(b,k){b.onclick=function(){if(k===it.a){b.classList.add('ok');r.classList.add('ok');bs.forEach(function(x){x.disabled=true});w.textContent='Đúng. '+it.w;if(--left===0)complete(id)}else{b.classList.add('bad');b.disabled=true;w.textContent='Chưa đúng, em thử lại nhé.'}}});box.appendChild(r)})}
+function pick(id,q,opts,a,w){var d=mk(id,'<h3>'+q+'</h3><div class="po"></div><p class="why"></p>'),why=d.querySelector('.why');opts.forEach(function(o,i){var b=document.createElement('button');b.type='button';b.className='opt pb';b.textContent=o;b.onclick=function(){if(i===a){b.classList.add('ok');d.querySelectorAll('.pb').forEach(function(x){x.disabled=true});why.textContent='Chính xác! '+w;complete(id)}else{b.classList.add('bad');b.disabled=true;why.textContent='Chưa đúng, em thử lại nhé.'}};d.querySelector('.po').appendChild(b)})}
+
+var NK=['Nên','Không nên'];
+pick('gioi-thieu','Khởi động: khi dùng Internet, em cần bảo vệ những gì?',['Tài khoản, dữ liệu và thiết bị của mình','Chỉ màu nền của màn hình','Chỉ cục sạc điện thoại'],0,'Dùng Internet an toàn là để bảo vệ tài khoản, dữ liệu và thiết bị của mình.');
+pick('phan-mem','Thử thách: em vừa cắm USB của bạn vào máy tính. Em nên làm gì trước tiên?',['Mở ngay tất cả tập tin trong USB','Quét USB bằng chương trình chống Virus','Tắt chương trình chống Virus cho nhanh','Sao chép hết sang máy rồi mới kiểm tra'],1,'Mọi thiết bị như USB, CD, DVD kết nối với máy tính đều cần được quét trước.');
+sorter('mang','Thử thách: nên hay không nên?',NK,[{t:'Dùng VPN khi buộc phải dùng mạng công cộng',a:0,w:'VPN tạo đường truyền được mã hóa.'},{t:'Nhập mật khẩu quan trọng khi dùng Wi-Fi quán cà phê',a:1,w:'Wi-Fi công cộng có thể không được bảo mật.'},{t:'Hạn chế kết nối Wi-Fi công cộng',a:0,w:'Mạng công cộng dễ bị đánh cắp dữ liệu.'},{t:'Đăng nhập tài khoản ngân hàng bằng Wi-Fi sân bay không có VPN',a:1,w:'Người khác có thể đánh cắp mật khẩu hoặc dữ liệu.'}]);
+sorter('lua-dao','Thử thách: nên hay không nên?',NK,[{t:'Xác định người gửi trước khi làm theo yêu cầu',a:0,w:'Cần xác định đối tượng trước khi thực hiện yêu cầu.'},{t:'Nhấp vào liên kết lạ trong Email',a:1,w:'Nên tránh nhấp vào liên kết trong Email.'},{t:'Kiểm tra thanh địa chỉ bắt đầu bằng tên trang Web hợp pháp',a:0,w:'Đây là cách nhận biết trang Web giả mạo.'},{t:'Cài tiện ích chống lừa đảo cho trình duyệt',a:0,w:'Tiện ích bổ sung giúp cảnh báo trang lừa đảo.'}]);
+sorter('smartphone','Thử thách: nên hay không nên?',NK,[{t:'Luôn giữ điện thoại bên mình',a:0,w:'Không để thiết bị ngoài tầm giám sát.'},{t:'Cấp mọi quyền cho ứng dụng mà không xem',a:1,w:'Cần quản lí quyền ứng dụng khi cài đặt.'},{t:'Khóa máy bằng mật mã, vân tay hoặc khuôn mặt',a:0,w:'Đây là cách bảo mật thiết bị.'},{t:'Tải ứng dụng từ trang Web không rõ nguồn',a:1,w:'Chỉ tải ứng dụng từ nguồn đáng tin cậy.'}]);
+pick('ai-5-buoc','Thử thách: trước khi gửi câu lệnh (prompt) cho AI, em nên làm gì với tên, email và số điện thoại của mình?',['Nhập đầy đủ để AI hiểu rõ hơn','Loại bỏ khỏi prompt','Chỉ nhập số điện thoại','Nhờ bạn nhập thay'],1,'Đây là Bước 3: tuyệt đối không nhập dữ liệu cá nhân vào câu lệnh.');
+pick('ai-cau-hoi','Tình huống: một công cụ AI yêu cầu em nhập số điện thoại và email mới cho dùng. Em nên làm gì?',['Nhập thông tin thật để dùng ngay','Ưu tiên chế độ khách hoặc không cung cấp thông tin cá nhân','Nhập thông tin của bạn em','Chia sẻ luôn cho cả lớp'],1,'Không cung cấp thông tin cá nhân và ưu tiên chế độ khách để bảo vệ danh tính.');
+sorter('ai-ket-qua','Thử thách: bỏ hay hỏi lại rõ ràng hơn?',['Bỏ','Hỏi lại'],[{t:'Một đoạn AI đưa ra không đúng so với sách giáo khoa',a:0,w:'Bỏ đi phần thông tin không đúng.'},{t:'Câu trả lời của AI còn chung chung, chưa đúng ý em',a:1,w:'Đặt lại câu lệnh chi tiết hơn.'},{t:'Một phần thông tin không liên quan đến đề bài',a:0,w:'Bỏ đi phần không liên quan.'},{t:'Kết quả thiếu chi tiết em cần',a:1,w:'Hỏi lại rõ ràng hơn để nhận kết quả chính xác hơn.'}]);
+
+var PIC={'gioi-thieu':'<svg viewBox="0 0 120 120"><path class="p" d="M60 8l42 16v30c0 28-18 48-42 58C36 102 18 82 18 54V24z"/><path class="sc" d="M40 60l14 14 28-30"/></svg>',
+'phan-mem':'<svg viewBox="0 0 120 120"><ellipse class="k" cx="60" cy="68" rx="26" ry="32"/><circle class="k" cx="60" cy="30" r="14"/><path class="sp" d="M34 52L14 42M34 70H10M36 90L18 104M86 52l20-10M86 70h24M84 90l18 14M52 18L44 6M68 18l8-12" style="stroke-width:6"/><path class="sc" d="M60 44v48"/></svg>',
+'mang':'<svg viewBox="0 0 120 120"><path class="sp" d="M14 50a64 64 0 0 1 92 0M30 66a40 40 0 0 1 60 0M46 82a18 18 0 0 1 28 0"/><circle class="k" cx="60" cy="98" r="8"/></svg>',
+'lua-dao':'<svg viewBox="0 0 120 120"><rect class="y" x="10" y="40" width="100" height="66" rx="8"/><path class="sc" d="M12 44l48 36 48-36" style="stroke:var(--purple)"/><path class="sp" d="M92 8v22a10 10 0 1 1-20 0" style="stroke:var(--pink)"/></svg>',
+'smartphone':'<svg viewBox="0 0 120 120"><rect class="p" x="32" y="6" width="56" height="108" rx="12"/><rect class="l" x="38" y="20" width="44" height="76" rx="4"/><circle class="w" cx="60" cy="106" r="4"/><rect class="y" x="50" y="56" width="20" height="16" rx="3"/><path class="sp" d="M54 56v-6a6 6 0 0 1 12 0v6" style="stroke-width:4"/></svg>',
+'ai-5-buoc':'<svg viewBox="0 0 120 120"><rect class="p" x="26" y="38" width="68" height="52" rx="16"/><rect class="y" x="58" y="20" width="4" height="18"/><circle class="k" cx="60" cy="16" r="6"/><circle class="w" cx="46" cy="62" r="8"/><circle class="w" cx="74" cy="62" r="8"/><circle class="p" cx="46" cy="62" r="3.5"/><circle class="p" cx="74" cy="62" r="3.5"/><rect class="y" x="46" y="78" width="28" height="5" rx="2.5"/><rect class="l" x="12" y="52" width="10" height="22" rx="5"/><rect class="l" x="98" y="52" width="10" height="22" rx="5"/></svg>',
+'ai-cau-hoi':'<svg viewBox="0 0 120 120"><circle class="y" cx="60" cy="60" r="50"/><path class="sp" d="M42 46a18 18 0 1 1 26 16c-6 4-8 8-8 14" style="stroke-width:9"/><circle class="p" cx="60" cy="96" r="6"/></svg>',
+'ai-ket-qua':'<svg viewBox="0 0 120 120"><rect class="w ln" x="14" y="12" width="92" height="96" rx="12"/><circle class="g" cx="34" cy="38" r="10"/><circle class="g" cx="34" cy="66" r="10"/><circle class="k" cx="34" cy="94" r="10"/><path class="sc" d="M29 38l4 4 7-8M29 66l4 4 7-8M30 90l8 8M38 90l-8 8"/><rect class="l" x="52" y="34" width="44" height="8" rx="4"/><rect class="l" x="52" y="62" width="44" height="8" rx="4"/><rect class="l" x="52" y="90" width="44" height="8" rx="4"/></svg>',
+'van-dung':'<svg viewBox="0 0 120 120"><path class="y" d="M38 20h44v30c0 16-10 26-22 26S38 66 38 50z"/><path class="sy" d="M38 28H26c0 14 6 22 14 24M82 28h12c0 14-6 22-14 24"/><rect class="y" x="54" y="76" width="12" height="14"/><rect class="p" x="38" y="90" width="44" height="12" rx="5"/><path class="k" d="M60 30l4 9 10 1-8 7 3 10-9-5-9 5 3-10-8-7 10-1z"/></svg>'};
+ids.forEach(function(id){var s=document.getElementById(id);if(id==='gioi-thieu')s.insertAdjacentHTML('afterbegin','<div class="pic big" aria-hidden="true">'+PIC[id]+'</div>');else s.querySelector('h2').insertAdjacentHTML('beforeend','<span class="pic" aria-hidden="true">'+PIC[id]+'</span>')});
+
+var Q=[
+{t:'Bạn cần duy trì bảo mật cho điện thoại thông minh của mình. Đâu là ba nguyên tắc bạn cần tuân thủ?',n:3,o:['Sử dụng cáp kết nối USB 3.0 trở lên khi kết nối với máy tính mới.','Chỉ cập nhật Hệ điều hành điện thoại thông minh nếu bạn cần một tính năng mới được cung cấp trong bản cập nhật.','Không để thiết bị của bạn ngoài tầm giám sát ở nơi công cộng hoặc ở những khu vực dễ tiếp cận.','Tắt Wi-Fi và Bluetooth khi bạn không sử dụng.','Luôn sử dụng thiết bị chống sốc điện trong khi sạc thiết bị.','Tránh sử dụng mạng Wi-Fi công cộng.'],a:[2,3,5],e:'Giữ thiết bị bên mình, tắt Wi-Fi/Bluetooth khi không dùng và tránh Wi-Fi công cộng đều là nguyên tắc bảo mật. Loại cáp USB hay thiết bị chống sốc điện không liên quan đến bảo mật, còn bản cập nhật hệ điều hành cần được cài đặt thường xuyên chứ không chỉ khi cần tính năng mới.'},
+{t:'Khi buộc phải dùng mạng công cộng, em dùng công cụ nào để dữ liệu an toàn hơn?',n:1,o:['Mạng riêng ảo (VPN)','Tắt chương trình chống Virus','Chia sẻ mật khẩu cho bạn bè','Tải thêm ứng dụng không rõ nguồn'],a:[0],e:'VPN tạo một đường truyền được mã hóa, giúp dữ liệu an toàn hơn trên mạng công cộng.'},
+{t:'Đâu là hai cách giúp giảm thiểu rủi ro lừa đảo?',n:2,o:['Kiểm tra thanh địa chỉ trang Web bắt đầu bằng tên trang Web hợp pháp.','Tránh nhấp vào liên kết trong Email.','Nhấp vào mọi liên kết để xem có gì.','Gửi mật khẩu cho người lạ yêu cầu.'],a:[0,1],e:'Kiểm tra thanh địa chỉ và tránh nhấp vào liên kết trong Email giúp em tránh các trang lừa đảo.'},
+{t:'Em đang dùng AI để học. Với mỗi hành động, hãy chọn Có nếu hành động đó an toàn và phù hợp, hoặc chọn Không nếu không.',yn:1,n:3,o:['Nhập tên, email và số điện thoại vào câu lệnh (prompt).','So sánh kết quả của AI với sách giáo khoa.','Chỉnh sửa bài theo ý hiểu của mình và ghi rõ nguồn tham khảo từ AI.'],a:[0,1,1],e:'Không nhập dữ liệu cá nhân vào prompt. Em cần đối chiếu kết quả với nguồn tin cậy, chỉnh sửa theo hiểu biết của mình và ghi nhận nguồn AI.'},
+{t:'Đâu là ba bước trong quy trình 5 bước để dùng AI an toàn?',n:3,o:['Xác định mục đích học tập.','Kiểm tra công cụ có được phép sử dụng không.','Loại bỏ dữ liệu cá nhân khỏi prompt.','Sao chép nguyên văn kết quả vào bài làm.','Nhập số điện thoại để AI hiểu rõ hơn.'],a:[0,1,2],e:'Ba bước đúng là xác định mục đích, kiểm tra công cụ được phép và loại bỏ dữ liệu cá nhân. Em không được sao chép nguyên văn hay nhập thông tin cá nhân.'}
+];
+function shuf(d){var its=[].slice.call(d.querySelectorAll('.opt,.yn')),btn=d.querySelector('.btn'),o;do{o=its.slice();for(var k=o.length-1;k>0;k--){var j=Math.floor(Math.random()*(k+1)),t=o[k];o[k]=o[j];o[j]=t}}while(o.length>1&&o.every(function(x,i){return x===its[i]}));o.forEach(function(x,i){d.insertBefore(x,btn);var b=x.querySelector('b');if(x.classList.contains('opt')&&b)b.textContent='ABCDEF'[i]+'.'})}
+var L='ABCDEF',box=document.getElementById('quizzes'),done={};
+Q.forEach(function(q,qi){
+  var d=document.createElement('div');d.className='quiz';
+  var h='<h3><span>'+(qi+1)+'</span><div>'+q.t+' <small>'+(q.yn?'(Chọn Có hoặc Không)':'(Chọn '+q.n+')')+'</small></div></h3>';
+  if(q.yn){q.o.forEach(function(x,i){h+='<div class="yn" data-i="'+i+'"><span>'+x+'</span><span class="sb"><label class="chip"><input type="radio" name="q'+qi+'_'+i+'" value="1">Có</label><label class="chip"><input type="radio" name="q'+qi+'_'+i+'" value="0">Không</label></span></div>'})}
+  else{q.o.forEach(function(x,i){h+='<label class="opt"><input type="'+(q.n===1?'radio':'checkbox')+'" name="q'+qi+'" value="'+i+'"><span><b>'+L[i]+'.</b> '+x+'</span></label>'})}
+  h+='<button class="btn" type="button">Kiểm tra</button><div class="fb" aria-live="polite"></div>';
+  d.innerHTML=h;box.appendChild(d);d.hidden=qi>0;
+  var inputs=d.querySelectorAll('input'),btn=d.querySelector('.btn'),fb=d.querySelector('.fb');
+  if(!q.yn&&q.n>1)inputs.forEach(function(inp){inp.addEventListener('change',function(){if(d.querySelectorAll('input:checked').length>q.n)inp.checked=false})});
+  btn.onclick=function(){
+    var right;
+    if(q.yn){
+      var rows=d.querySelectorAll('.yn'),ans=[],miss=false;
+      rows.forEach(function(r){var c=r.querySelector('input:checked');if(!c)miss=true;ans.push(c?+c.value:-1)});
+      if(miss){fb.textContent='Em cần chọn Có hoặc Không cho cả '+q.o.length+' câu phát biểu.';return}
+      right=ans.every(function(v,i){return v===q.a[+rows[i].dataset.i]});
+      rows.forEach(function(r,i){r.classList.remove('ok','bad');r.classList.add(ans[i]===q.a[+rows[i].dataset.i]?'ok':'bad')});
+      if(!right){fb.textContent='Chưa đúng, em xem lại các dòng màu đỏ nhé.';setTimeout(function(){rows.forEach(function(r){r.classList.remove('ok','bad')});inputs.forEach(function(i){i.checked=false});shuf(d)},1200);return}
+    }else{
+      var sel=[].map.call(d.querySelectorAll('input:checked'),function(i){return +i.value});
+      if(sel.length!==q.n){fb.textContent='Em cần chọn đúng '+q.n+' đáp án.';return}
+      right=sel.every(function(s){return q.a.indexOf(s)>-1});
+      d.querySelectorAll('.opt').forEach(function(o,i){var isA=q.a.indexOf(i)>-1,chk=sel.indexOf(i)>-1;o.classList.remove('ok','bad','miss');if(chk)o.classList.add(isA?'ok':'bad');else if(isA&&right)o.classList.add('miss')});
+      if(!right){fb.textContent='Chưa đúng, em chọn lại nhé.';setTimeout(function(){d.querySelectorAll('.opt').forEach(function(o){o.classList.remove('ok','bad','miss')});inputs.forEach(function(i){i.checked=false});shuf(d)},1200);return}
+    }
+    inputs.forEach(function(i){i.disabled=true});btn.hidden=true;
+    fb.textContent='Chính xác! '+q.e;
+    done[qi]=right;var nx=box.children[qi+1];if(nx){var b=document.createElement('button');b.className='btn';b.type='button';b.style.marginTop='12px';b.textContent='Câu tiếp theo';b.onclick=function(){d.hidden=true;nx.hidden=false};d.appendChild(b)}
+    if(Object.keys(done).length===Q.length){
+      var s2=Object.keys(done).filter(function(k){return done[k]}).length,t=document.getElementById('total');
+      t.hidden=false;complete('van-dung');t.innerHTML='<h3>🎉 Hoàn thành bài học!</h3><b>Kết quả: '+s2+'/'+Q.length+' câu đúng.</b> Em đã nắm vững bài học.';
+    }
+  };
+});
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Bài 12 — Tìm kiếm thông tin và thu hẹp phạm vi tìm kiếm</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fbfaff;--surface:#fff;--ink:#2b2b2b;--muted:#5d5873;--purple:#6b3fa0;--lilac:#e9e4ff;--yellow:#fdd118;--pink:#ff2d6b;--green:#00864a;--line:#ddd7f2;--ok:#e3f6ec;--bad:#ffe4ec;color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#17132a;--surface:#221c3b;--ink:#f1eefc;--muted:#b9b2d6;--purple:#c3a5ff;--lilac:#2d2552;--line:#3b3263;--green:#4fd18b;--ok:#17382a;--bad:#44202f;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#17132a;--surface:#221c3b;--ink:#f1eefc;--muted:#b9b2d6;--purple:#c3a5ff;--lilac:#2d2552;--line:#3b3263;--green:#4fd18b;--ok:#17382a;--bad:#44202f;color-scheme:dark}
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:calc(64px + env(safe-area-inset-top,0px));scroll-behavior:smooth}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 17px/1.65 "Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",sans-serif}
+h1,h2,h3{line-height:1.25;margin:0 0 .5em}
+h1{font-size:clamp(2rem,6vw,3.4rem);font-weight:800;color:var(--purple)}
+h2{font-size:clamp(1.5rem,4vw,2.1rem);font-weight:800;color:var(--purple)}
+h3{font-size:1.15rem;font-weight:700}
+p{margin:0 0 1em;max-width:68ch}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--pink);outline-offset:2px}
+nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--surface);border-bottom:1px solid var(--line);display:flex;gap:4px;align-items:center;padding:8px 16px;overflow-x:auto}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--surface);z-index:21}
+nav b{margin-right:auto;white-space:nowrap;color:var(--purple)}
+nav a,nav button{white-space:nowrap;text-decoration:none;padding:6px 12px;border-radius:99px;font:500 .9rem inherit;color:var(--ink);background:none;border:0;cursor:pointer}
+nav a:hover,nav button:hover{background:var(--lilac)}
+nav a.on{background:var(--yellow);color:#2b2b2b;font-weight:700}
+a.btn{text-decoration:none;display:inline-block}
+html{font-size:112.5%}
+html,body{height:100%;overflow:hidden}
+body{display:flex;flex-direction:column;font-size:1rem;line-height:1.55}
+nav{flex:none}
+main{flex:1;min-height:0;width:100%;max-width:none;padding:0 5px;display:flex;flex-direction:column}
+.tag{align-self:flex-start}
+main section,main section.hero{flex:1;min-height:0;overflow-y:auto;display:flex;flex-direction:column;padding:12px 0 0}
+main section[hidden]{display:none}
+footer{display:none}
+.pager{display:flex;justify-content:space-between;gap:12px;margin-top:auto;padding:14px 0}
+h1{font-size:clamp(1.8rem,5vw,2.6rem)}
+h2{font-size:clamp(1.3rem,3.5vw,1.7rem)}
+h3{margin:.8em 0 .3em}
+h3[style]{margin-top:12px!important}
+p{margin:0 0 .6em}
+.grid{margin:8px 0 12px;gap:10px}
+.box{padding:12px 16px}
+.lab{padding:16px;margin:8px 0}
+.quiz{padding:16px;margin:0}
+.opt{padding:7px 10px;margin:6px 0}
+.rule{padding:16px}
+.key{margin:12px 0}
+ul.ticks li{padding:3px 0 3px 28px}
+ul.row{display:flex;flex-wrap:wrap;gap:4px 24px}
+.goals{margin-top:16px}
+.quiz .btn:not([hidden]){display:block;margin-left:auto}
+.lock{opacity:.45;pointer-events:none}
+nav a.lock::after{content:" 🔒";font-size:.8em}
+nav a.done::after{content:" ✓";color:var(--green);font-weight:800}
+.btn.alt{background:var(--yellow);color:#2b2b2b!important}
+main section.play>*:not(.act):not(.pager){display:none}
+main section:not(.play) .act{display:none}
+.sr{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:6px 12px;padding:6px 12px;border:2px solid var(--line);border-radius:10px;margin:5px 0;background:var(--bg)}
+.sr.ok{background:var(--ok);border-color:var(--green)}
+.sb{display:flex;gap:8px}
+.chip{font:inherit;font-size:.9rem;font-weight:700;border:2px solid var(--line);background:var(--surface);color:var(--ink);border-radius:99px;padding:4px 14px;cursor:pointer}
+.chip.ok{background:var(--ok);border-color:var(--green)}
+.chip.bad{background:var(--bad);border-color:var(--pink);text-decoration:line-through}
+.chip:disabled{cursor:default}
+.sw{flex-basis:100%;color:var(--muted)}
+button.pb{width:100%;text-align:left;font:inherit;color:inherit}
+button.pb:disabled{cursor:default}
+.why{font-weight:500;margin:8px 0 0;min-height:1.5em}
+.fin{font-weight:700;color:var(--green);margin:10px 0 0}
+main section h2{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.pic{flex:none;display:block}
+.pic svg{display:block;width:64px;height:64px}
+#gioi-thieu{position:relative}
+.pic.big{position:absolute;right:8px;top:12px}
+.pic.big svg{width:170px;height:170px}
+@media(min-width:701px){#gioi-thieu h1,#gioi-thieu .lead{padding-right:190px}}
+@media(max-width:700px){.pic.big{display:none}}
+.pic .p{fill:var(--purple)}.pic .y{fill:var(--yellow)}.pic .k{fill:var(--pink)}.pic .g{fill:var(--green)}.pic .l{fill:var(--lilac)}.pic .w{fill:var(--surface)}.pic .tp{fill:var(--purple)}
+.pic .ln{stroke:var(--line);stroke-width:3}
+.pic .sy{fill:none;stroke:var(--yellow);stroke-width:6;stroke-linecap:round}
+.pic .sc{fill:none;stroke:var(--bg);stroke-width:6;stroke-linecap:round;stroke-linejoin:round}
+#bar{position:absolute;left:0;bottom:-1px;height:3px;width:0;background:var(--pink)}
+main{max-width:none;margin:0 auto;padding:0 40px 20px}
+section{padding:56px 0 8px}
+.hero{padding:56px 0 24px}
+.tag{display:inline-block;background:var(--yellow);color:#2b2b2b;font-weight:700;padding:4px 14px;border-radius:99px;margin-bottom:16px}
+.lead{font-size:1.2rem;color:var(--muted)}
+.goals{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));margin-top:24px}
+.box{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px 20px}
+.box.lilac{background:var(--lilac);border-color:transparent}
+.grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));margin:16px 0 24px}
+ul.ticks{list-style:none;padding:0;margin:0}
+ul.ticks li{padding:6px 0 6px 28px;position:relative}
+ul.ticks li::before{content:"✓";position:absolute;left:0;color:var(--green);font-weight:800}
+ul.cross li::before{content:"✕";color:var(--pink)}
+.key{border-left:6px solid var(--yellow);background:var(--surface);padding:14px 18px;border-radius:0 12px 12px 0;margin:20px 0}
+.lab{background:var(--lilac);border-radius:18px;padding:22px;margin:20px 0}
+.lab input[type=text]{width:100%;font:500 1.1rem inherit;padding:12px 14px;border:2px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink)}
+.meter{height:12px;border-radius:99px;background:var(--line);margin:14px 0;overflow:hidden}
+.meter i{display:block;height:100%;width:0;background:var(--pink);transition:width .25s,background .25s}
+.checks{display:grid;gap:4px 16px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));list-style:none;padding:0;margin:0}
+.checks li::before{content:"○ ";color:var(--muted)}
+.checks li.on{color:var(--green);font-weight:500}
+.checks li.on::before{content:"● "}
+.small{font-size:.9rem;color:var(--muted)}
+.rules{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));margin:20px 0}
+.rule{background:var(--purple);color:#fff;border-radius:16px;padding:22px 18px;text-align:center;font-weight:700;font-size:1.15rem}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .rule{color:#17132a}}
+:root[data-theme="dark"] .rule{color:#17132a}
+.quiz{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:20px;margin:0 0 20px}
+.quiz h3{display:flex;gap:12px;align-items:flex-start}
+.quiz h3 span{flex:none;width:34px;height:34px;border-radius:50%;background:var(--yellow);color:#2b2b2b;display:grid;place-items:center;font-weight:800}
+.opt{display:flex;gap:12px;align-items:flex-start;padding:10px 12px;border:2px solid var(--line);border-radius:10px;margin:8px 0;cursor:pointer;background:var(--bg)}
+.opt input{margin-top:6px;accent-color:var(--purple)}
+.opt.ok{background:var(--ok);border-color:var(--green)}
+.opt.bad{background:var(--bad);border-color:var(--pink)}
+.opt.miss{border-style:dashed;border-color:var(--green)}
+.btn{font:700 1rem inherit;background:var(--purple);color:#fff;border:0;border-radius:99px;padding:10px 22px;cursor:pointer}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .btn{color:#17132a}}
+:root[data-theme="dark"] .btn{color:#17132a}
+.fb{margin-top:12px;font-weight:500}
+footer{text-align:center;color:var(--muted);padding:32px 20px;border-top:1px solid var(--line)}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.meter i{transition:none}}
+.art{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 16px;max-height:40vh;overflow:auto}
+.art p{margin:0 0 .6em;max-width:none}
+mark{background:var(--yellow);color:#2b2b2b;border-radius:3px;padding:0 2px}
+code{background:var(--lilac);border-radius:6px;padding:1px 8px;font-weight:700}
+.yn{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:6px 12px;padding:8px 12px;border:2px solid var(--line);border-radius:10px;margin:6px 0;background:var(--bg)}
+.yn.ok{background:var(--ok);border-color:var(--green)}.yn.bad{background:var(--bad);border-color:var(--pink)}
+.chip input{accent-color:var(--purple);margin-right:4px}
+.flow{display:grid;gap:10px;grid-template-columns:1fr auto 1fr auto 1fr;align-items:stretch;margin:12px 0}
+.flow .arrow{display:grid;place-items:center;font-size:1.6rem;color:var(--pink)}
+@media(max-width:700px){.flow{grid-template-columns:1fr}.flow .arrow{transform:rotate(90deg)}}
+.num{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:50%;background:var(--yellow);color:#2b2b2b;font-weight:800;margin-right:8px}
+.pic .sp{fill:none;stroke:var(--purple);stroke-width:8;stroke-linecap:round}
+</style>
+</head>
+<body>
+<nav>
+<b>IC3 GS6 · Bài 12</b>
+<a href="#gioi-thieu">Giới thiệu</a><a href="#web">Thông tin trên Web</a><a href="#cong-cu">Công cụ tìm kiếm</a><a href="#thu">Thử Ctrl+F</a><a href="#ai">Tìm kiếm và AI</a><a href="#thu-hep">Thu hẹp</a><a href="#ai-hep">Thu hẹp với AI</a><a href="#phu-hop">Tìm kiếm phù hợp</a><a href="#van-dung">Vận dụng</a>
+<button id="theme" type="button" aria-label="Đổi giao diện sáng hoặc tối">Sáng/Tối</button>
+<div id="bar"></div>
+</nav>
+<main>
+<section id="gioi-thieu" class="hero">
+<span class="tag">Chủ đề: Quản lí thông tin</span>
+<h1>Tìm kiếm thông tin và thu hẹp phạm vi tìm kiếm</h1>
+<p class="lead">Sau bài này, em biết các loại thông tin trên Web, biết dùng công cụ tìm kiếm và Ctrl+F, biết thu hẹp kết quả tìm kiếm và chọn thông tin phù hợp.</p>
+<p class="small">Mỗi phần có một thử thách. Hoàn thành thử thách để mở khóa phần tiếp theo.</p><div class="goals">
+<div class="box lilac"><h3>Phần 1</h3>Thông tin trên trang Web</div>
+<div class="box lilac"><h3>Phần 2</h3>Công cụ tìm kiếm</div>
+<div class="box lilac"><h3>Phần 3</h3>Thu hẹp phạm vi tìm kiếm</div>
+<div class="box lilac"><h3>Phần 4</h3>Tìm kiếm phù hợp</div>
+<div class="box lilac"><h3>Vận dụng</h3>7 câu hỏi luyện tập</div>
+</div>
+</section>
+
+<section id="web">
+<h2>1. Thông tin trên trang Web</h2>
+<ul class="ticks"><li>Có hàng trăm thông tin được trình bày trên các trang Web: văn bản, hình ảnh, âm thanh, video…</li><li>Các loại trang Web khác nhau chứa các loại thông tin chuyên biệt khác nhau.</li></ul>
+<h3 style="margin-top:20px">Một số loại trang Web</h3>
+<div class="grid">
+<div class="box"><b>Web kinh doanh</b><br>CafeF, Tiki, Shopee</div>
+<div class="box"><b>Web chính phủ</b><br>Cổng thông tin của cơ quan nhà nước</div>
+<div class="box"><b>Web giáo dục</b><br>Duolingo</div>
+<div class="box"><b>Web mạng xã hội</b><br>Facebook, Twitter, YouTube</div>
+</div>
+<div class="key">Một trong những cách để tìm kiếm thông tin là dùng <b>trường tìm kiếm trên Web</b> hoặc dùng <b>một công cụ tìm kiếm</b>.</div>
+</section>
+
+<section id="cong-cu">
+<h2>2. Công cụ tìm kiếm</h2>
+<div class="grid">
+<div class="box"><b>Công cụ tìm kiếm (Search Engine)</b><br>Cho phép tìm kiếm thông tin trên Internet về một chủ đề cụ thể. Ví dụ: Google, Bing.</div>
+<div class="box"><b>Tính năng Tìm kiếm (Find)</b><br>Giúp tìm thông tin về một chủ đề có trong một trang Web hoặc một tài liệu.</div>
+</div>
+<div class="key"><b>Lưu ý:</b> Công cụ tìm kiếm là một tính năng của một trang Web chạy trên trình duyệt Web.</div>
+<p>Tính năng Tìm kiếm (Find) có trên <b>trình duyệt Web</b> và trên các <b>phần mềm xử lí văn bản</b> (ví dụ Word).</p>
+</section>
+
+<section id="thu">
+<h2>Thử tính năng Tìm kiếm (Ctrl+F)</h2>
+<ul class="ticks"><li>Nhấn Ctrl+F tại trang Web.</li><li>Nhập từ khóa cần tìm: số lần từ khóa xuất hiện trên trang sẽ hiện ra.</li><li>Các từ được tìm thấy sẽ được tô màu.</li></ul>
+<div class="lab">
+<h3>Thử ngay: tìm từ khóa trong bài đọc</h3>
+<label for="fq" class="small">Mục tiêu: gõ một từ khóa xuất hiện ít nhất 3 lần trong bài đọc bên dưới (gợi ý: “mạng”, “Internet” hoặc “Web”).</label>
+<input id="fq" type="text" autocomplete="off" spellcheck="false" placeholder="Nhập từ khóa, ví dụ: mạng">
+<p id="fc" style="margin:10px 0;font-weight:700">Hãy gõ từ khóa để bắt đầu tìm</p>
+<div class="art" id="art"></div>
+</div>
+</section>
+
+<section id="ai">
+<h2>Tìm kiếm truyền thống và AI tạo sinh</h2>
+<div class="grid">
+<div class="box"><b>Công cụ tìm kiếm</b><br>Giúp tìm các trang Web, tài liệu và nguồn thông tin <b>đã có</b> trên Internet.</div>
+<div class="box"><b>AI tạo sinh (Generative AI)</b><br>Có thể tạo câu trả lời <b>mới</b> theo yêu cầu của người dùng.</div>
+</div>
+<h3>Các bước của công cụ tìm kiếm</h3>
+<div class="flow">
+<div class="box lilac"><b>1. Thu thập</b><br>Robot thu thập thông tin trên Internet.</div><div class="arrow">→</div>
+<div class="box lilac"><b>2. Tổ chức</b><br>Phân loại và lưu vào cơ sở dữ liệu khổng lồ.</div><div class="arrow">→</div>
+<div class="box lilac"><b>3. Liệt kê</b><br>Hiển thị danh sách kết quả dựa trên từ khóa.</div>
+</div>
+<div class="key"><b>Thông điệp quan trọng:</b> Hai công cụ đều hữu ích nhưng không giống nhau. Khi cần nguồn gốc, dữ liệu chính xác hoặc tài liệu tham khảo, em cần kiểm tra từ các nguồn đáng tin cậy.</div>
+</section>
+
+<section id="thu-hep">
+<h2>3. Thu hẹp phạm vi tìm kiếm</h2>
+<p>Thu hẹp kết quả tìm kiếm là hành động giúp <b>giảm số lượng kết quả</b> trả về trong một lần tìm kiếm, nhằm sàng lọc kết quả tốt hơn và phù hợp hơn.</p>
+<div class="grid">
+<div class="box"><b>Toán tử NOT (-)</b><br>Dùng để loại trừ. Ví dụ: <code>animal -lion</code> sẽ loại trừ “sư tử” khỏi kết quả.</div>
+<div class="box"><b>Tìm kiếm chính xác (“ ”)</b><br>Đặt cụm từ trong cặp ngoặc kép để lấy chính xác thông tin cần tìm. Ví dụ: <code>“hải cẩu billy”</code>.</div>
+</div>
+<div class="grid">
+<div class="box">Tìm bình thường <code>hải cẩu billy</code>: kết quả rất nhiều, đa phần liên quan đến các từ “hải”, “cẩu”, “billy”.</div>
+<div class="box">Có ngoặc kép <code>“hải cẩu billy”</code>: kết quả trả về chính xác cụm từ và số lượng kết quả ít lại.</div>
+</div>
+</section>
+
+<section id="ai-hep">
+<h2>Thu hẹp phạm vi tìm kiếm với AI</h2>
+<p>AI có thể hỗ trợ gợi ý từ khóa hẹp hơn.</p>
+<div class="flow">
+<div class="box lilac"><b>Tìm kiếm ban đầu (rộng)</b><br>Người dùng nhập: <code>mạng</code></div><div class="arrow">→</div>
+<div class="box lilac"><b>AI phân tích và gợi ý</b><br>Gợi ý từ khóa cụ thể.</div><div class="arrow">→</div>
+<div class="box lilac"><b>Tìm kiếm tối ưu (hẹp)</b><br><code>mạng máy tính là gì cho học sinh lớp 6</code></div>
+</div>
+<div class="key">AI cũng có thể giúp tóm tắt thông tin, nhưng <b>bản tóm tắt phải được đối chiếu với nguồn gốc</b>.</div>
+</section>
+
+<section id="phu-hop">
+<h2>4. Tìm kiếm phù hợp</h2>
+<div class="grid">
+<div class="box"><span class="num">1</span><b>Chủ đề</b><br>Xác định chủ đề cần tìm kiếm.</div>
+<div class="box"><span class="num">2</span><b>Độ liên quan</b><br>Xác định mức độ liên quan của từ khóa.</div>
+<div class="box"><span class="num">3</span><b>Phiên bản mới nhất</b><br>Xác định phiên bản mới nhất của thông tin.</div>
+<div class="box"><span class="num">4</span><b>Nguồn thông tin</b><br>Xác định nguồn thông tin.</div>
+<div class="box"><span class="num">5</span><b>Thẩm quyền</b><br>Xác định thẩm quyền của tác giả.</div>
+</div>
+</section>
+
+<section id="van-dung">
+<h2>Vận dụng</h2>
+<p>Chọn đúng số đáp án theo yêu cầu, rồi bấm “Kiểm tra”.</p>
+<div id="quizzes"></div>
+<div class="box lilac" id="total" hidden></div>
+</section>
+</main>
+<footer>IC3 GS6 Level 1 · Bài 12 · Tìm kiếm thông tin và thu hẹp phạm vi tìm kiếm</footer>
+
+<script>
+
+(function(){
+var root=document.documentElement;
+document.getElementById('theme').onclick=function(){
+  var dark=root.getAttribute('data-theme')==='dark'||(!root.getAttribute('data-theme')&&matchMedia('(prefers-color-scheme: dark)').matches);
+  root.setAttribute('data-theme',dark?'light':'dark');
+};
+var okSet={};
+function reach(){for(var i=0;i<ids.length;i++)if(!okSet[ids[i]])return i;return ids.length-1}
+function refresh(){var r=reach();links.forEach(function(a,i){a.classList.toggle('lock',i>r);a.classList.toggle('done',!!okSet[ids[i]]);if(i>r)a.setAttribute('aria-disabled','true');else a.removeAttribute('aria-disabled')});document.querySelectorAll('[data-next]').forEach(function(b){var lk=!okSet[ids[+b.dataset.next]];b.classList.toggle('lock',lk);b.textContent=lk?'Tiếp theo 🔒':'Tiếp theo'})}
+function complete(id){if(okSet[id])return;okSet[id]=1;refresh();var m=document.getElementById(id).querySelector('.fin');if(m)m.hidden=false}
+var ids=['gioi-thieu','web','cong-cu','thu','ai','thu-hep','ai-hep','phu-hop','van-dung'],links=document.querySelectorAll('nav a');
+ids.forEach(function(s,i){var d=document.createElement('div');d.className='pager';d.innerHTML=(i?'<a class="btn" href="#'+ids[i-1]+'">Trước</a>':'<span></span>')+(i<ids.length-1?'<a class="btn" href="#'+ids[i+1]+'" data-next="'+i+'">Tiếp theo</a>':'');document.getElementById(s).appendChild(d)});
+function show(){refresh();var id=location.hash.slice(1);if(ids.indexOf(id)<0)id=ids[0];var rc=reach();if(ids.indexOf(id)>rc){id=ids[rc];try{history.replaceState(null,'','#'+id)}catch(e){}}ids.forEach(function(s){document.getElementById(s).hidden=s!==id});links.forEach(function(a){var on=a.getAttribute('href')==='#'+id;a.classList.toggle('on',on);if(on)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current')});document.getElementById(id).scrollTop=0;document.getElementById('bar').style.width=((ids.indexOf(id)+1)/ids.length*100)+'%'}
+addEventListener('hashchange',show);show();
+var FIN='<p class="fin" hidden>✓ Hoàn thành! Bấm “Tiếp theo” để sang phần sau.</p>';
+function mk(id,html){var s=document.getElementById(id),d=document.createElement('div');d.className='act';d.innerHTML=html+FIN;var pg=s.querySelector('.pager');s.insertBefore(d,pg);var b=document.createElement('button');b.type='button';b.className='btn alt';b.textContent='Thử thách';b.onclick=function(){var p=s.classList.toggle('play');b.textContent=p?'Xem nội dung':'Thử thách';s.scrollTop=0};pg.insertBefore(b,pg.children[1]||null);return d}
+function sorter(id,title,L,items){var d=mk(id,'<h3>'+title+'</h3><div class="sl"></div>'),box=d.querySelector('.sl'),left=items.length;items.forEach(function(it){var r=document.createElement('div');r.className='sr';r.innerHTML='<span>'+it.t+'</span><span class="sb"><button type="button" class="chip">'+L[0]+'</button><button type="button" class="chip">'+L[1]+'</button></span><small class="sw"></small>';var bs=r.querySelectorAll('button'),w=r.querySelector('.sw');bs.forEach(function(b,k){b.onclick=function(){if(k===it.a){b.classList.add('ok');r.classList.add('ok');bs.forEach(function(x){x.disabled=true});w.textContent='Đúng. '+it.w;if(--left===0)complete(id)}else{b.classList.add('bad');b.disabled=true;w.textContent='Chưa đúng, em thử lại nhé.'}}});box.appendChild(r)})}
+function pick(id,q,opts,a,w){var d=mk(id,'<h3>'+q+'</h3><div class="po"></div><p class="why"></p>'),why=d.querySelector('.why');opts.forEach(function(o,i){var b=document.createElement('button');b.type='button';b.className='opt pb';b.textContent=o;b.onclick=function(){if(i===a){b.classList.add('ok');d.querySelectorAll('.pb').forEach(function(x){x.disabled=true});why.textContent='Chính xác! '+w;complete(id)}else{b.classList.add('bad');b.disabled=true;why.textContent='Chưa đúng, em thử lại nhé.'}};d.querySelector('.po').appendChild(b)})}
+document.querySelector('#thu .lab').insertAdjacentHTML('beforeend',FIN);
+pick('gioi-thieu','Khởi động: em có thể dùng cách nào để tìm thông tin trên Web?',['Dùng trường tìm kiếm trên Web hoặc dùng công cụ tìm kiếm','Đọc lần lượt từng trang Web trên Internet','Tắt máy tính rồi mở lại'],0,'Em có thể dùng trường tìm kiếm trên Web hoặc một công cụ tìm kiếm.');
+pick('web','Thử thách: Duolingo thuộc loại trang Web nào?',['Web kinh doanh','Web chính phủ','Web giáo dục','Web mạng xã hội'],2,'Duolingo là trang Web học ngoại ngữ nên thuộc loại Web giáo dục.');
+sorter('cong-cu','Thử thách: đây là công cụ tìm kiếm hay tính năng Find?',['Công cụ tìm kiếm','Tính năng Find'],[{t:'Tìm thông tin về một chủ đề trên Internet',a:0,w:'Search Engine tìm trên Internet.'},{t:'Nhấn Ctrl+F để tìm một từ trong trang Web đang mở',a:1,w:'Find chỉ tìm trong trang hoặc tài liệu đang mở.'},{t:'Google, Bing',a:0,w:'Đây là các công cụ tìm kiếm.'},{t:'Tìm một từ trong tài liệu Word',a:1,w:'Phần mềm xử lí văn bản cũng có tính năng Find.'}]);
+sorter('ai','Thử thách: công cụ tìm kiếm hay AI tạo sinh?',['Công cụ tìm kiếm','AI tạo sinh'],[{t:'Tìm các trang Web đã có trên Internet',a:0,w:'Công cụ tìm kiếm tìm nguồn thông tin đã có.'},{t:'Viết bài thơ ngắn về biển',a:1,w:'AI tạo sinh tạo nội dung mới.'},{t:'Hiển thị danh sách kết quả dựa trên từ khóa',a:0,w:'Đây là bước liệt kê của công cụ tìm kiếm.'},{t:'Lập dàn ý bài văn kể về một chuyến đi',a:1,w:'AI tạo sinh trả lời mới theo yêu cầu.'}]);
+sorter('thu-hep','Thử thách: dùng dấu trừ (-) hay dấu ngoặc kép?',['Dấu trừ (-)','Ngoặc kép'],[{t:'Loại “lion” khỏi kết quả khi tìm animal',a:0,w:'Toán tử NOT (-) dùng để loại trừ.'},{t:'Chỉ lấy kết quả có đúng cụm từ “hải cẩu billy”',a:1,w:'Ngoặc kép giúp tìm chính xác cụm từ.'},{t:'Bỏ bớt kết quả chứa một từ không mong muốn',a:0,w:'Dùng dấu trừ trước từ cần loại.'},{t:'Tìm nguyên văn một câu dài',a:1,w:'Đặt cả câu trong ngoặc kép.'}]);
+pick('ai-hep','Thử thách: từ khóa nào hẹp và rõ hơn từ “mạng”?',['mạng','mạng máy tính là gì cho học sinh lớp 6','máy','tìm mạng'],1,'Từ khóa này nêu rõ chủ đề và đối tượng nên kết quả chính xác hơn.');
+pick('phu-hop','Tình huống: bài viết em tìm được đăng từ nhiều năm trước, trong khi em cần quy định hiện hành. Em cần xác định tiêu chí nào?',['Chủ đề cần tìm kiếm','Phiên bản mới nhất của thông tin','Thẩm quyền của tác giả','Mức độ liên quan của từ khóa'],1,'Thông tin cũ có thể đã thay đổi, nên cần xác định phiên bản mới nhất.');
+var PIC={'gioi-thieu':'<svg viewBox="0 0 120 120"><circle class="l" cx="50" cy="50" r="34"/><circle class="sp" cx="50" cy="50" r="34"/><path class="sp" d="M76 76l30 30" style="stroke-width:12"/><path class="sy" d="M36 44a18 18 0 0 1 14-12"/></svg>',
+'web':'<svg viewBox="0 0 120 120"><circle class="p" cx="60" cy="60" r="46"/><ellipse class="sc" cx="60" cy="60" rx="18" ry="46"/><path class="sc" d="M14 60h92M22 38h76M22 82h76"/></svg>',
+'cong-cu':'<svg viewBox="0 0 120 120"><rect class="w ln" x="8" y="20" width="104" height="80" rx="10"/><path class="p" d="M8 30a10 10 0 0 1 10-10h84a10 10 0 0 1 10 10v8H8z"/><rect class="l" x="22" y="52" width="76" height="18" rx="9"/><circle class="sp" cx="34" cy="61" r="4" style="stroke-width:3"/><rect class="y" x="44" y="58" width="40" height="6" rx="3"/><rect class="l" x="22" y="78" width="50" height="8" rx="4"/></svg>',
+'thu':'<svg viewBox="0 0 120 120"><rect class="w ln" x="18" y="10" width="84" height="100" rx="10"/><rect class="l" x="30" y="26" width="60" height="8" rx="4"/><rect class="y" x="30" y="46" width="34" height="10" rx="3"/><rect class="l" x="68" y="46" width="22" height="8" rx="4"/><rect class="l" x="30" y="66" width="60" height="8" rx="4"/><rect class="y" x="30" y="84" width="26" height="10" rx="3"/></svg>',
+'ai':'<svg viewBox="0 0 120 120"><rect class="p" x="26" y="38" width="68" height="52" rx="16"/><rect class="y" x="58" y="20" width="4" height="18"/><circle class="k" cx="60" cy="16" r="6"/><circle class="w" cx="46" cy="62" r="8"/><circle class="w" cx="74" cy="62" r="8"/><circle class="p" cx="46" cy="62" r="3.5"/><circle class="p" cx="74" cy="62" r="3.5"/><rect class="y" x="46" y="78" width="28" height="5" rx="2.5"/><rect class="l" x="12" y="52" width="10" height="22" rx="5"/><rect class="l" x="98" y="52" width="10" height="22" rx="5"/></svg>',
+'thu-hep':'<svg viewBox="0 0 120 120"><path class="p" d="M12 18h96L72 62v38l-24 12V62z"/><rect class="y" x="30" y="30" width="60" height="8" rx="4"/><rect class="k" x="84" y="84" width="28" height="8" rx="4"/></svg>',
+'ai-hep':'<svg viewBox="0 0 120 120"><path class="y" d="M60 10l10 28 28 10-28 10-10 28-10-28-28-10 28-10z"/><path class="k" d="M96 74l4 10 10 4-10 4-4 10-4-10-10-4 10-4z"/><circle class="p" cx="24" cy="96" r="8"/></svg>',
+'phu-hop':'<svg viewBox="0 0 120 120"><rect class="w ln" x="14" y="12" width="92" height="96" rx="12"/><circle class="g" cx="34" cy="38" r="10"/><circle class="g" cx="34" cy="66" r="10"/><circle class="g" cx="34" cy="94" r="10"/><path class="sc" d="M29 38l4 4 7-8M29 66l4 4 7-8M29 94l4 4 7-8"/><rect class="l" x="52" y="34" width="44" height="8" rx="4"/><rect class="l" x="52" y="62" width="44" height="8" rx="4"/><rect class="l" x="52" y="90" width="44" height="8" rx="4"/></svg>',
+'van-dung':'<svg viewBox="0 0 120 120"><path class="y" d="M38 20h44v30c0 16-10 26-22 26S38 66 38 50z"/><path class="sy" d="M38 28H26c0 14 6 22 14 24M82 28h12c0 14-6 22-14 24"/><rect class="y" x="54" y="76" width="12" height="14"/><rect class="p" x="38" y="90" width="44" height="12" rx="5"/><path class="k" d="M60 30l4 9 10 1-8 7 3 10-9-5-9 5 3-10-8-7 10-1z"/></svg>'};
+ids.forEach(function(id){var s=document.getElementById(id);if(id==='gioi-thieu')s.insertAdjacentHTML('afterbegin','<div class="pic big" aria-hidden="true">'+PIC[id]+'</div>');else s.querySelector('h2').insertAdjacentHTML('beforeend','<span class="pic" aria-hidden="true">'+PIC[id]+'</span>')});
+
+var ART=['Mạng máy tính là tập hợp các máy tính và thiết bị được kết nối với nhau để chia sẻ dữ liệu. Nhờ mạng, em có thể gửi thư điện tử, xem video và học trực tuyến.','Internet là mạng lớn nhất thế giới, kết nối hàng tỉ thiết bị. Khi truy cập Internet, em dùng trình duyệt Web để mở các trang Web.','Công cụ tìm kiếm giúp tìm thông tin trên Internet. Tính năng Find giúp tìm nhanh một từ khóa trong trang Web đang mở.'];
+var art=document.getElementById('art'),fq=document.getElementById('fq'),fc=document.getElementById('fc');
+function esc(t){return t.replace(/&/g,'&amp;').replace(/</g,'&lt;')}
+function rx(t){return t.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')}
+function render(){var v=fq.value.trim(),n=0,h=ART.map(function(p){var e=esc(p);if(v.length>1)e=e.replace(new RegExp(rx(esc(v)),'giu'),function(m){n++;return '<mark>'+m+'</mark>'});return '<p>'+e+'</p>'}).join('');art.innerHTML=h;fc.textContent=!v?'Hãy gõ từ khóa để bắt đầu tìm':n?'Tìm thấy '+n+' kết quả':'Không tìm thấy kết quả nào';if(n>=3&&v.length>=3)complete('thu')}
+fq.addEventListener('input',render);render();
+
+var Q=[
+{t:'Bạn đang thực hiện một nghiên cứu trực tuyến. Bạn cần phải điều chỉnh cài đặt tìm kiếm để nhận được kết quả phù hợp hơn với đối tượng nghiên cứu của mình. Đâu là hai kỹ thuật bạn nên sử dụng?',n:2,o:['Tìm kiếm các từ gốc và loại trừ hậu tố','Đặt các cụm từ tìm kiếm dài trong dấu ngoặc kép','Tìm kiếm các thuật ngữ chung chung','Đặt các cụm từ tìm kiếm quan trọng nhất trong dấu ngoặc vuông'],a:[0,1],e:'Dấu ngoặc kép giúp tìm chính xác cụm từ, còn từ gốc kèm loại trừ giúp bỏ bớt kết quả không cần. Thuật ngữ chung chung làm kết quả rộng hơn, còn dấu ngoặc vuông không phải cách thu hẹp tìm kiếm.'},
+{t:'Bạn đang thực hiện một dự án nghiên cứu. Bạn tìm thấy một bài báo trực tuyến dài chứa thông tin liên quan đến chủ đề nghiên cứu của bạn. Bạn có thể tìm thấy những thông tin nào trên trang Web bằng cách sử dụng tính năng Tìm kiếm (Find) của trình duyệt?',n:1,o:['Số lần bài báo đề cập đến một chủ đề cụ thể','Danh sách các chủ đề phụ liên quan đến chủ đề nghiên cứu chính của bạn','Đáp án chọn một câu hỏi cụ thể liên quan đến chủ đề bài viết','Bình luận liên quan trên các trang mạng xã hội'],a:[0],e:'Find đếm số lần từ khóa xuất hiện trên trang. Nó không lập danh sách chủ đề phụ, không trả lời câu hỏi và không tìm bình luận ở trang khác.'},
+{t:'Bạn đang nghiên cứu thông tin trong một tài liệu dài. Với mỗi câu phát biểu, hãy chọn Có nếu bạn có thể sử dụng tính năng Tìm kiếm (Find) để hoàn thành công việc hoặc chọn Không nếu bạn không thể.',yn:1,n:3,o:['Xác định một từ khóa hoặc cụm từ trong tài liệu.','Thay đổi định dạng của tất cả các trích dẫn trong tài liệu của bạn.','Xác định các trang có tài liệu tham khảo của một tác giả cụ thể.'],a:[1,0,1],e:'Find giúp tìm từ khóa, cụm từ hoặc tên tác giả trong tài liệu. Find chỉ tìm, không thay đổi định dạng.'},
+{t:'Đâu là hai cách giúp thu hẹp kết quả tìm kiếm?',n:2,o:['Dùng toán tử NOT (-) để loại trừ một từ.','Đặt cụm từ cần tìm trong cặp ngoặc kép.','Chỉ nhập một từ khóa thật chung chung.','Nhập thêm nhiều từ không liên quan.'],a:[0,1],e:'Dấu trừ loại bớt kết quả không mong muốn, còn ngoặc kép chỉ lấy kết quả chứa đúng cụm từ.'},
+{t:'Em nhấn Ctrl+F trên một trang Web để làm gì?',n:1,o:['Tìm từ khóa trong trang Web đang mở.','Tìm các trang Web khác trên Internet.','Lưu trang Web vào máy tính.','Đăng xuất khỏi trang Web.'],a:[0],e:'Ctrl+F mở tính năng Find để tìm từ khóa trong trang đang mở và tô màu các từ tìm thấy.'},
+{t:'Đâu là ba việc em cần xác định để tìm kiếm phù hợp?',n:3,o:['Mức độ liên quan của từ khóa.','Phiên bản mới nhất của thông tin.','Nguồn thông tin.','Màu nền của trang Web.','Số lượng quảng cáo trên trang.'],a:[0,1,2],e:'Em cần xác định chủ đề, độ liên quan của từ khóa, phiên bản mới nhất, nguồn thông tin và thẩm quyền của tác giả.'},
+{t:'Khi AI tóm tắt thông tin giúp em, em cần làm gì?',n:1,o:['Tin hoàn toàn mà không cần kiểm tra.','Đối chiếu bản tóm tắt với nguồn gốc.','Xóa nguồn gốc của thông tin.','Chia sẻ ngay cho mọi người.'],a:[1],e:'AI có thể tóm tắt, nhưng bản tóm tắt phải được đối chiếu với nguồn gốc đáng tin cậy.'}
+];
+var L='ABCDEF',box=document.getElementById('quizzes'),done={};
+Q.forEach(function(q,qi){
+  var d=document.createElement('div');d.className='quiz';
+  var h='<h3><span>'+(qi+1)+'</span><div>'+q.t+' <small>'+(q.yn?'(Chọn Có hoặc Không)':'(Chọn '+q.n+')')+'</small></div></h3>';
+  if(q.yn){q.o.forEach(function(x,i){h+='<div class="yn"><span>'+x+'</span><span class="sb"><label class="chip"><input type="radio" name="q'+qi+'_'+i+'" value="1">Có</label><label class="chip"><input type="radio" name="q'+qi+'_'+i+'" value="0">Không</label></span></div>'})}
+  else{q.o.forEach(function(x,i){h+='<label class="opt"><input type="'+(q.n===1?'radio':'checkbox')+'" name="q'+qi+'" value="'+i+'"><span><b>'+L[i]+'.</b> '+x+'</span></label>'})}
+  h+='<button class="btn" type="button">Kiểm tra</button><div class="fb" aria-live="polite"></div>';
+  d.innerHTML=h;box.appendChild(d);d.hidden=qi>0;
+  var inputs=d.querySelectorAll('input'),btn=d.querySelector('.btn'),fb=d.querySelector('.fb');
+  if(!q.yn&&q.n>1)inputs.forEach(function(inp){inp.addEventListener('change',function(){if(d.querySelectorAll('input:checked').length>q.n)inp.checked=false})});
+  btn.onclick=function(){
+    var right;
+    if(q.yn){
+      var rows=d.querySelectorAll('.yn'),ans=[],miss=false;
+      rows.forEach(function(r){var c=r.querySelector('input:checked');if(!c)miss=true;ans.push(c?+c.value:-1)});
+      if(miss){fb.textContent='Em cần chọn Có hoặc Không cho cả '+q.o.length+' câu phát biểu.';return}
+      right=ans.every(function(v,i){return v===q.a[i]});
+      rows.forEach(function(r,i){r.classList.remove('ok','bad');r.classList.add(ans[i]===q.a[i]?'ok':'bad')});
+      if(!right){fb.textContent='Chưa đúng, em xem lại các dòng màu đỏ nhé.';setTimeout(function(){rows.forEach(function(r){r.classList.remove('ok','bad')});inputs.forEach(function(i){i.checked=false})},1200);return}
+    }else{
+      var sel=[].map.call(d.querySelectorAll('input:checked'),function(i){return +i.value});
+      if(sel.length!==q.n){fb.textContent='Em cần chọn đúng '+q.n+' đáp án.';return}
+      right=sel.every(function(s){return q.a.indexOf(s)>-1});
+      d.querySelectorAll('.opt').forEach(function(o,i){var isA=q.a.indexOf(i)>-1,chk=sel.indexOf(i)>-1;o.classList.remove('ok','bad','miss');if(chk)o.classList.add(isA?'ok':'bad');else if(isA&&right)o.classList.add('miss')});
+      if(!right){fb.textContent='Chưa đúng, em chọn lại nhé.';setTimeout(function(){d.querySelectorAll('.opt').forEach(function(o){o.classList.remove('ok','bad','miss')});inputs.forEach(function(i){i.checked=false})},1200);return}
+    }
+    inputs.forEach(function(i){i.disabled=true});btn.hidden=true;
+    fb.textContent='Chính xác! '+q.e;
+    done[qi]=right;var nx=box.children[qi+1];if(nx){var b=document.createElement('button');b.className='btn';b.type='button';b.style.marginTop='12px';b.textContent='Câu tiếp theo';b.onclick=function(){d.hidden=true;nx.hidden=false};d.appendChild(b)}
+    if(Object.keys(done).length===Q.length){
+      var s2=Object.keys(done).filter(function(k){return done[k]}).length,t=document.getElementById('total');
+      t.hidden=false;complete('van-dung');t.innerHTML='<h3>🎉 Hoàn thành bài học!</h3><b>Kết quả: '+s2+'/'+Q.length+' câu đúng.</b> Em đã nắm vững bài học.';
+    }
+  };
+});
+})();
+</script>
+</body>
+</html>
